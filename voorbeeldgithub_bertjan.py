@@ -57,8 +57,14 @@ class Expression():
     def __add__(self, other):
         return AddNode(self, other)
 
+    def __sub__(self, other):
+        return SubNode(self, other)
+
     def __mul__(self, other):
         return MulNode(self, other)
+
+    def __truediv__(self, other):
+        return DivNode(self, other)
         
     # TODO: other overloads, such as __sub__, __mul__, etc.
     
@@ -173,9 +179,19 @@ class AddNode(BinaryNode):
     def __init__(self, lhs, rhs):
         super(AddNode, self).__init__(lhs, rhs, '+')
 
+class SubNode(BinaryNode):
+    """Represents the substraction operator"""
+    def __init__(self, lhs, rhs):
+        super(SubNode, self).__init__(lhs, rhs, '-')
+
 class MulNode(BinaryNode):
-    """Represents the addition operator"""
+    """Represents the multiplication operator"""
     def __init__(self, lhs, rhs):
         super(MulNode, self).__init__(lhs, rhs, '*')
         
+class DivNode(BinaryNode):
+    """Represents the division operator"""
+    def __init__(self, lhs, rhs):
+        super(DivNode, self).__init__(lhs, rhs, '/')
+
 # TODO: add more subclasses of Expression to represent operators, variables, functions, etc.
