@@ -4,7 +4,7 @@ import math
 # returns a list of numbers, operators, parantheses and commas
 # output will not contain spaces
 def tokenize(string):
-    splitchars = list("+-*/(),")
+    splitchars = list("+-*/(),%")
     
     # surround any splitchar by spaces
     tokenstring = []
@@ -66,7 +66,17 @@ class Expression():
     def __truediv__(self, other):
         return DivNode(self, other)
         
-    # TODO: other overloads, such as __sub__, __mul__, etc.
+    def __pow__(self, other):
+        return PowNode(self, other)
+
+    def __mod__(self, other):
+        return ModNode(self, other)
+
+    def __floordiv__(self, other):
+        return FloorDivNode(self, other)
+
+
+    # TODO: other overloads, such as __sub__, __mul__, __truediv__, __pow__, __mod__, __floordiv__ etc.
     
     # basic Shunting-yard algorithm
     def fromString(string):
@@ -80,7 +90,7 @@ class Expression():
         output = []
         
         # list of operators
-        oplist = ['+']
+        oplist = ['+', '-', '*', '/', '**', '%', '//']
         
         for token in tokens:
             if isnumber(token):
@@ -193,5 +203,20 @@ class DivNode(BinaryNode):
     """Represents the division operator"""
     def __init__(self, lhs, rhs):
         super(DivNode, self).__init__(lhs, rhs, '/')
+
+class PowNode(BinaryNode):
+    """Represents the power operator"""
+    def __init__(self, lhs, rhs):
+        super(PowNode, self).__init__(lhs, rhs, '**')
+
+class ModNode(BinaryNode):
+    """Represents the modulus operator"""
+    def __init__(self, lhs, rhs):
+        super(ModNode, self).__init__(lhs, rhs, '%')
+
+class FloorDivNode(BinaryNode):
+    """Represents the floor division operator"""
+    def __init__(self, lhs, rhs):
+        super(FloorDivNode, self).__init__(lhs, rhs, '//')
 
 # TODO: add more subclasses of Expression to represent operators, variables, functions, etc.
