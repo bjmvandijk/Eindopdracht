@@ -147,23 +147,66 @@ class Expression():
 
 def evaluate(self):
         
-    #new = self
-    new = str(self)
+    new =str(self)
+    
+    
+    
     oplist = ['+', '-', '*', '/', '**', '%', '//', '(', ')']
     #oplist2 = ['(','+','-','*','/','**',')']
-    new1 = 0
-    new2 = []
-    for i in new:
-        if i is not ' ':
-            new2 += i
+    count=0
+    
+    #for i in new:
+    count+=new.count("(")    
+    i=0
+    j=0
+    
+    while i<len(new):
+        if new[i]=='(':
+            if count==1:
+                i=j
+                while j<len(new):
+                    if new[j]==')':
+                        print(new[i+1:j+1])
+                        new2=new[i+1:j+1]
+                        new3=str()
+                        for i in new2:
+                            oplist3=[' ','(',')']
+                            if i not in oplist3:
+                                new3+=i
+                        print(new3)        
+                        if '+' in new3:
+                            new4=float(new3[0])+float(new3[2])
+                        elif '-' in new3:
+                            new4=float(new3[0])-float(new3[2])   
+                        elif '/' in new3:
+                            new4=float(new3[0])/float(new3[2])    
+                        elif '*' in new3:
+                            new4=float(new3[0])*float(new3[2])
+                        elif '**' in new3:
+                            new4=float(new3[0])**float(new3[2])  
+                        elif '%' in new3:
+                            new4=float(new3[0])%float(new3[2])
+                        elif '//' in new3:
+                            new4=float(new3[0])//float(new3[2])    
+                        print(new4)    
+                        j=(len(new)-1)
+                        i=(len(new)-1)
+                    j+=1
+                i+=1
+            count-=1
+            i+=1
+            
+            #else:
+             #   continue
+        else:
+            i+=1
+    new=new.split()
+            
+    print(new, type(new))
         
-    for i in new2:
-        if i not in oplist:
-            new2 = float(i)
-            new1 += new2
-    #print(new1, 'bitches')        
-    #print(new2)
-    return new1
+    
+    
+    return new
 
     
 class Constant(Expression):
