@@ -55,7 +55,7 @@ class Expression():
      - __str__(): return a string representation of the Expression.
      - __eq__(other): tree-equality, check if other represents the same expression tree.
     """
-    # TODO: when adding new methods that should be supported by all subclasses, add them to this list
+##### TODO: when adding new methods that should be supported by all subclasses, add them to this list
     
     # operator overloading:
     # this allows us to perform 'arithmetic' with expressions, and obtain another expression
@@ -80,9 +80,6 @@ class Expression():
     def __floordiv__(self, other):
         return FloorDivNode(self, other)
 
-
-    # TODO: other overloads, such as __sub__, __mul__, __truediv__, __pow__, __mod__, __floordiv__ etc.
-    
     # basic Shunting-yard algorithm
     def fromString(string):
         # split into tokens
@@ -107,7 +104,7 @@ class Expression():
             elif token in oplist:
                 # pop operators from the stack to the output until the top is no longer an operator
                 while True:
-                    # TODO: when there are more operators, the rules are more complicated
+##################### TODO: when there are more operators, the rules are more complicated
                     # look up the shunting yard-algorithm
                     if len(stack) == 0 or stack[-1] not in oplist:
                         break
@@ -123,7 +120,7 @@ class Expression():
                     output.append(stack.pop())
                 # pop the left paranthesis from the stack (but not to the output)
                 stack.pop()
-            # TODO: do we need more kinds of tokens?
+############# TODO: do we need more kinds of tokens?
             else:
                 # unknown token
                 raise ValueError('Unknown token: %s' % token)
@@ -147,60 +144,60 @@ class Expression():
 
 def evaluate(self):
         
-    new =str(self)
+    new = str(self)
     
     
     
-    oplist = ['+', '-', '*', '/', '**', '%', '//', '(', ')']
+    charlist = ['+', '-', '*', '/', '**', '%', '//', '(', ')']
     #oplist2 = ['(','+','-','*','/','**',')']
-    count=0
+    count = 0
     
     #for i in new:
-    count+=new.count("(")    
-    i=0
-    j=0
+    count += new.count("(")    
+    i = 0
+    j = 0
     
-    while i<len(new):
-        if new[i]=='(':
-            if count==1:
-                i=j
-                while j<len(new):
-                    if new[j]==')':
+    while i < len(new):
+        if new[i] == '(':
+            if count == 1:
+                i = j
+                while j < len(new):
+                    if new[j] == ')':
                         print(new[i+1:j+1])
-                        new2=new[i+1:j+1]
-                        new3=str()
+                        new2 = new[i+1:j+1]
+                        new3 = str()
                         for i in new2:
-                            oplist3=[' ','(',')']
-                            if i not in oplist3:
-                                new3+=i
+                            charlist3=[' ', '(', ')']
+                            if i not in charlist3:
+                                new3 += i
                         print(new3)        
                         if '+' in new3:
-                            new4=float(new3[0])+float(new3[2])
+                            new4 = float(new3[0]) + float(new3[2])
                         elif '-' in new3:
-                            new4=float(new3[0])-float(new3[2])   
+                            new4 = float(new3[0]) - float(new3[2])   
                         elif '/' in new3:
-                            new4=float(new3[0])/float(new3[2])    
+                            new4 = float(new3[0]) / float(new3[2])    
                         elif '*' in new3:
-                            new4=float(new3[0])*float(new3[2])
+                            new4 = float(new3[0]) * float(new3[2])
                         elif '**' in new3:
-                            new4=float(new3[0])**float(new3[2])  
+                            new4 = float(new3[0]) ** float(new3[2])  
                         elif '%' in new3:
-                            new4=float(new3[0])%float(new3[2])
+                            new4 = float(new3[0]) % float(new3[2])
                         elif '//' in new3:
-                            new4=float(new3[0])//float(new3[2])    
+                            new4 = float(new3[0]) // float(new3[2])    
                         print(new4)    
-                        j=(len(new)-1)
-                        i=(len(new)-1)
-                    j+=1
-                i+=1
-            count-=1
-            i+=1
+                        j = (len(new)-1)
+                        i = (len(new)-1)
+                    j += 1
+                i += 1
+            count -= 1
+            i += 1
             
             #else:
              #   continue
         else:
-            i+=1
-    new=new.split()
+            i += 1
+    new = new.split()
             
     print(new, type(new))
         
@@ -238,7 +235,7 @@ class BinaryNode(Expression):
         self.rhs = rhs
         self.op_symbol = op_symbol
     
-    # TODO: what other properties could you need? Precedence, associativity, identity, etc.
+##### TODO: what other properties could you need? Precedence, associativity, identity, etc.
             
     def __eq__(self, other):
         if type(self) == type(other):
@@ -250,7 +247,7 @@ class BinaryNode(Expression):
         lstring = str(self.lhs)
         rstring = str(self.rhs)
         
-        # TODO: do we always need parantheses?
+######### TODO: do we always need parantheses?
         return "(%s %s %s)" % (lstring, self.op_symbol, rstring)
         
 class AddNode(BinaryNode):
