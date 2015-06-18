@@ -71,7 +71,7 @@ class Expression():
         output = []
         
         # list of operators
-        oplist = ['+']
+        oplist = ['+','-','*','/','**']
         
         for token in tokens:
             if isnumber(token):
@@ -120,6 +120,8 @@ class Expression():
                 stack.append(t)
         # the resulting expression tree is what's left on the stack
         return stack[0]
+    def __sub__(self, other):
+        return SubNode(self, other)    
     
 class Constant(Expression):
     """Represents a constant value"""
@@ -169,5 +171,61 @@ class AddNode(BinaryNode):
     """Represents the addition operator"""
     def __init__(self, lhs, rhs):
         super(AddNode, self).__init__(lhs, rhs, '+')
+    def evaluate(self):
+        
+        new=self
+        new=str(self)
+        oplist = ['+','-','*','/','**']
+        oplist2 = ['(','+','-','*','/','**',')']
+        new1=0
+        new2=str()
+        for i in new:
+            if i is not ' ':
+                new2+=i
+        
+        for i in new2:
+            if i not in oplist2:
+                new2=float(i)
+                new1+=new2
+                '''try:
+                    new1={i+1,i}
+                except:
+                    new1={}
+                '''
+        print(new1, 'bitches')        
+        #print(new,new[0])
+        return new1
+        
+class SubNode(BinaryNode):
+    """Represents the subtracting operator"""
+    def __init__(self, lhs, rhs):
+        super(SubNode, self).__init__(lhs, rhs, '-')
+    def evaluate(self):
+        
+        new=self
+        new=str(self)
+        oplist = ['+','-','*','/','**']
+        oplist2 = ['(','+','-','*','/','**',')']
+        new1=0
+        new2=str()
+        for i in new:
+            if i is not ' ':
+                new2+=i
+        for i in new2:
+            if i not in oplist2:
+                if i==new[1]:
+                    new2=float(i)
+                    new1=new2
+                else:    
+                    new2=float(i)
+                    new1-=new2
+                '''try:
+                    new1={i+1,i}
+                except:
+                    new1={}
+                '''
+        print(new1, 'hell yeah')        
+        #print(new,new[0])
+        return new1
         
 # TODO: add more subclasses of Expression to represent operators, variables, functions, etc.
