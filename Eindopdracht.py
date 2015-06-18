@@ -169,13 +169,21 @@ def evaluate(self):
                         print(new[i+1:j+1])
                         new2=new[i+1:j+1]
                         new3=str()
-                        for i in new2:
+                        for k in new2:
                             oplist3=[' ','(',')']
-                            if i not in oplist3:
-                                new3+=i
-                        print(new3)        
+                            if k not in oplist3:
+                                new3+=k
+                        print(new3)
+                        #new3=new3.split()
                         if '+' in new3:
+                            
                             new4=float(new3[0])+float(new3[2])
+                            new5=new[:i+1]+str(new4)+new[j+1:]
+                            new=new5
+                            i=0
+                            j=0
+                            count+=new.count("(") 
+                            print(new)
                         elif '-' in new3:
                             new4=float(new3[0])-float(new3[2])   
                         elif '/' in new3:
@@ -188,9 +196,7 @@ def evaluate(self):
                             new4=float(new3[0])%float(new3[2])
                         elif '//' in new3:
                             new4=float(new3[0])//float(new3[2])    
-                        print(new4)    
-                        j=(len(new)-1)
-                        i=(len(new)-1)
+                           
                     j+=1
                 i+=1
             count-=1
