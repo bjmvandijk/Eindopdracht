@@ -149,21 +149,24 @@ def evaluate(self):
         
     #new = self
     new = str(self)
-    oplist = ['+', '-', '*', '/', '**', '%', '//', '(', ')']
+    charlist = ['+', '-', '*', '/', '**', '%', '//']#, '(', ')']
     #oplist2 = ['(','+','-','*','/','**',')']
-    new1 = 0
+    new1 = []
     new2 = []
+    new3 = []
     for i in new:
         if i is not ' ':
-            new2 += i
-        
-    for i in new2:
-        if i not in oplist:
-            new2 = float(i)
-            new1 += new2
-    #print(new1, 'bitches')        
-    #print(new2)
-    return new1
+            new1.append(i)
+    print(new1)
+
+    for i in new1:
+        if i not in charlist:# and i != '(' or ')':
+            #new2 = float(i)
+            new2.append(i)
+        else:
+        	new3.append(i)
+    print(new2)
+    return new3
 
     
 class Constant(Expression):
@@ -209,7 +212,12 @@ class BinaryNode(Expression):
         
         # TODO: do we always need parantheses?
         return "(%s %s %s)" % (lstring, self.op_symbol, rstring)
-        
+
+#class FunctionNode(Expression):
+#	"""A node in the expression tree representing a mathematical function"""
+#
+#	def __init__():
+       
 class AddNode(BinaryNode):
     """Represents the addition operator"""
     def __init__(self, lhs, rhs):
