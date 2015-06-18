@@ -17,14 +17,17 @@ def tokenize(string):
     #split on spaces - this gives us our tokens
     tokens = tokenstring.split()
     
-    #special casing for **:
+    #special casing for ** and //
     ans = []
     for t in tokens:
         if len(ans) > 0 and t == ans[-1] == '*':
             ans[-1] = '**'
+        elif len(ans) > 0 and t == ans[-1] == '/':
+            ans[-1] = '//'
         else:
             ans.append(t)
     return ans
+
     
 # check if a string represents a numeric value
 def isnumber(string):
@@ -218,5 +221,10 @@ class FloorDivNode(BinaryNode):
     """Represents the floor division operator"""
     def __init__(self, lhs, rhs):
         super(FloorDivNode, self).__init__(lhs, rhs, '//')
+
+#class XNode(BinaryNode):
+#    """Represents the x variable"""
+#   def __init__(self, ??, ??):
+
 
 # TODO: add more subclasses of Expression to represent operators, variables, functions, etc.
