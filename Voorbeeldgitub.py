@@ -1,10 +1,12 @@
+#!/usr/bin/python3
+
 import math
 
 # split a string into mathematical tokens
 # returns a list of numbers, operators, parantheses and commas
 # output will not contain spaces
 def tokenize(string):
-    splitchars = list("+-*/(),")
+    splitchars = list("+-*/(),%")
     
     # surround any splitchar by spaces
     tokenstring = []
@@ -17,14 +19,17 @@ def tokenize(string):
     #split on spaces - this gives us our tokens
     tokens = tokenstring.split()
     
-    #special casing for **:
+    #special casing for ** and //
     ans = []
     for t in tokens:
         if len(ans) > 0 and t == ans[-1] == '*':
             ans[-1] = '**'
+        elif len(ans) > 0 and t == ans[-1] == '/':
+            ans[-1] = '//'
         else:
             ans.append(t)
     return ans
+
     
 # check if a string represents a numeric value
 def isnumber(string):
@@ -56,8 +61,27 @@ class Expression():
     # this allows us to perform 'arithmetic' with expressions, and obtain another expression
     def __add__(self, other):
         return AddNode(self, other)
+
+    def __sub__(self, other):
+        return SubNode(self, other)
+
+    def __mul__(self, other):
+        return MulNode(self, other)
+
+    def __truediv__(self, other):
+        return DivNode(self, other)
         
-    # TODO: other overloads, such as __sub__, __mul__, etc.
+    def __pow__(self, other):
+        return PowNode(self, other)
+
+    def __mod__(self, other):
+        return ModNode(self, other)
+
+    def __floordiv__(self, other):
+        return FloorDivNode(self, other)
+
+
+    # TODO: other overloads, such as __sub__, __mul__, __truediv__, __pow__, __mod__, __floordiv__ etc.
     
     # basic Shunting-yard algorithm
     def fromString(string):
@@ -71,7 +95,7 @@ class Expression():
         output = []
         
         # list of operators
-        oplist = ['+','-','*','/','**']
+        oplist = ['+', '-', '*', '/', '**', '%', '//']
         
         for token in tokens:
             if isnumber(token):
@@ -120,8 +144,76 @@ class Expression():
                 stack.append(t)
         # the resulting expression tree is what's left on the stack
         return stack[0]
-    def __sub__(self, other):
-        return SubNode(self, other)    
+
+def evaluate(self):
+        
+    new =str(self)
+    
+    
+    
+    oplist = ['+', '-', '*', '/', '**', '%', '//', '(', ')']
+    #oplist2 = ['(','+','-','*','/','**',')']
+    count=0
+    
+    #for i in new:
+    count+=new.count("(")    
+    i=0
+    j=0
+    
+    while i<len(new):
+        if new[i]=='(':
+            if count==1:
+                i=j
+                while j<len(new):
+                    if new[j]==')':
+                        print(new[i+1:j+1])
+                        new2=new[i+1:j+1]
+                        new3=str()
+                        for k in new2:
+                            oplist3=[' ','(',')']
+                            if k not in oplist3:
+                                new3+=k
+                        print(new3)
+                        #new3=new3.split()
+                        if '+' in new3:
+                            
+                            new4=float(new3[0])+float(new3[2])
+                            new5=new[:i+1]+str(new4)+new[j+1:]
+                            new=new5
+                            i=0
+                            j=0
+                            count+=new.count("(") 
+                            print(new)
+                        elif '-' in new3:
+                            new4=float(new3[0])-float(new3[2])   
+                        elif '/' in new3:
+                            new4=float(new3[0])/float(new3[2])    
+                        elif '*' in new3:
+                            new4=float(new3[0])*float(new3[2])
+                        elif '**' in new3:
+                            new4=float(new3[0])**float(new3[2])  
+                        elif '%' in new3:
+                            new4=float(new3[0])%float(new3[2])
+                        elif '//' in new3:
+                            new4=float(new3[0])//float(new3[2])    
+                           
+                    j+=1
+                i+=1
+            count-=1
+            i+=1
+            
+            #else:
+             #   continue
+        else:
+            i+=1
+    new=new.split()
+            
+    print(new, type(new))
+        
+    
+    
+    return new
+
     
 class Constant(Expression):
     """Represents a constant value"""
@@ -171,61 +263,61 @@ class AddNode(BinaryNode):
     """Represents the addition operator"""
     def __init__(self, lhs, rhs):
         super(AddNode, self).__init__(lhs, rhs, '+')
+
     def evaluate(self):
-        
-        new=self
-        new=str(self)
-        oplist = ['+','-','*','/','**']
-        oplist2 = ['(','+','-','*','/','**',')']
-        new1=0
-        new2=str()
-        for i in new:
-            if i is not ' ':
-                new2+=i
-        
-        for i in new2:
-            if i not in oplist2:
-                new2=float(i)
-                new1+=new2
-                '''try:
-                    new1={i+1,i}
-                except:
-                    new1={}
-                '''
-        print(new1, 'bitches')        
-        #print(new,new[0])
-        return new1
-        
+    	ans = evaluate(self)
+    	return ans
+
 class SubNode(BinaryNode):
-    """Represents the subtracting operator"""
+    """Represents the substraction operator"""
     def __init__(self, lhs, rhs):
         super(SubNode, self).__init__(lhs, rhs, '-')
+
     def evaluate(self):
+    	ans = evaluate(self)
+    	return ans
+
+class MulNode(BinaryNode):
+    """Represents the multiplication operator"""
+    def __init__(self, lhs, rhs):
+        super(MulNode, self).__init__(lhs, rhs, '*')
+
+    def evaluate(self):
+    	ans = evaluate(self)
+    	return ans
         
-        new=self
-        new=str(self)
-        oplist = ['+','-','*','/','**']
-        oplist2 = ['(','+','-','*','/','**',')']
-        new1=0
-        new2=str()
-        for i in new:
-            if i is not ' ':
-                new2+=i
-        for i in new2:
-            if i not in oplist2:
-                if i==new[1]:
-                    new2=float(i)
-                    new1=new2
-                else:    
-                    new2=float(i)
-                    new1-=new2
-                '''try:
-                    new1={i+1,i}
-                except:
-                    new1={}
-                '''
-        print(new1, 'hell yeah')        
-        #print(new,new[0])
-        return new1
-        
-# TODO: add more subclasses of Expression to represent operators, variables, functions, etc.
+class DivNode(BinaryNode):
+    """Represents the division operator"""
+    def __init__(self, lhs, rhs):
+        super(DivNode, self).__init__(lhs, rhs, '/')
+
+    def evaluate(self):
+    	ans = evaluate(self)
+    	return ans
+
+class PowNode(BinaryNode):
+    """Represents the power operator"""
+    def __init__(self, lhs, rhs):
+        super(PowNode, self).__init__(lhs, rhs, '**')
+
+    def evaluate(self):
+    	ans = evaluate(self)
+    	return ans
+
+class ModNode(BinaryNode):
+    """Represents the modulus operator"""
+    def __init__(self, lhs, rhs):
+        super(ModNode, self).__init__(lhs, rhs, '%')
+
+    def evaluate(self):
+    	ans = evaluate(self)
+    	return ans
+
+class FloorDivNode(BinaryNode):
+    """Represents the floor division operator"""
+    def __init__(self, lhs, rhs):
+        super(FloorDivNode, self).__init__(lhs, rhs, '//')
+
+    def evaluate(self):
+    	ans = evaluate(self)
+    	return ans
