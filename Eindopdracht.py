@@ -147,26 +147,66 @@ class Expression():
 
 def evaluate(self):
         
-    #new = self
-    new = str(self)
-    charlist = ['+', '-', '*', '/', '**', '%', '//']#, '(', ')']
+    new =str(self)
+    
+    
+    
+    oplist = ['+', '-', '*', '/', '**', '%', '//', '(', ')']
     #oplist2 = ['(','+','-','*','/','**',')']
-    new1 = []
-    new2 = []
-    new3 = []
-    for i in new:
-        if i is not ' ':
-            new1.append(i)
-    print(new1)
-
-    for i in new1:
-        if i not in charlist:# and i != '(' or ')':
-            #new2 = float(i)
-            new2.append(i)
+    count=0
+    
+    #for i in new:
+    count+=new.count("(")    
+    i=0
+    j=0
+    
+    while i<len(new):
+        if new[i]=='(':
+            if count==1:
+                i=j
+                while j<len(new):
+                    if new[j]==')':
+                        print(new[i+1:j+1])
+                        new2=new[i+1:j+1]
+                        new3=str()
+                        for i in new2:
+                            oplist3=[' ','(',')']
+                            if i not in oplist3:
+                                new3+=i
+                        print(new3)        
+                        if '+' in new3:
+                            new4=float(new3[0])+float(new3[2])
+                        elif '-' in new3:
+                            new4=float(new3[0])-float(new3[2])   
+                        elif '/' in new3:
+                            new4=float(new3[0])/float(new3[2])    
+                        elif '*' in new3:
+                            new4=float(new3[0])*float(new3[2])
+                        elif '**' in new3:
+                            new4=float(new3[0])**float(new3[2])  
+                        elif '%' in new3:
+                            new4=float(new3[0])%float(new3[2])
+                        elif '//' in new3:
+                            new4=float(new3[0])//float(new3[2])    
+                        print(new4)    
+                        j=(len(new)-1)
+                        i=(len(new)-1)
+                    j+=1
+                i+=1
+            count-=1
+            i+=1
+            
+            #else:
+             #   continue
         else:
-        	new3.append(i)
-    print(new2)
-    return new3
+            i+=1
+    new=new.split()
+            
+    print(new, type(new))
+        
+    
+    
+    return new
 
     
 class Constant(Expression):
@@ -212,12 +252,7 @@ class BinaryNode(Expression):
         
         # TODO: do we always need parantheses?
         return "(%s %s %s)" % (lstring, self.op_symbol, rstring)
-
-#class FunctionNode(Expression):
-#	"""A node in the expression tree representing a mathematical function"""
-#
-#	def __init__():
-       
+        
 class AddNode(BinaryNode):
     """Represents the addition operator"""
     def __init__(self, lhs, rhs):
