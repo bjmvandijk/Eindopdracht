@@ -146,74 +146,154 @@ class Expression():
         return stack[0]
 
 def evaluate(self):
-        
     new =str(self)
-    
-    
-    
     oplist = ['+', '-', '*', '/', '**', '%', '//', '(', ')']
-    #oplist2 = ['(','+','-','*','/','**',')']
+    oplist2 = ['+','-','*','/','**', '%','//']
     count=0
-    
-    #for i in new:
-    count+=new.count("(")    
+    count+=new.count("(") 
     i=0
     j=0
-    
     while i<len(new):
         if new[i]=='(':
             if count==1:
-                i=j
+                j=i
                 while j<len(new):
                     if new[j]==')':
-                        print(new[i+1:j+1])
-                        new2=new[i+1:j+1]
+                        new2=new[i:j+1]
                         new3=str()
                         for k in new2:
                             oplist3=[' ','(',')']
                             if k not in oplist3:
                                 new3+=k
-                        print(new3)
-                        #new3=new3.split()
                         if '+' in new3:
-                            
-                            new4=float(new3[0])+float(new3[2])
-                            new5=new[:i+1]+str(new4)+new[j+1:]
-                            new=new5
+                            l=0
+                            while l<len(new3):
+                                if new3[l] in oplist2:    
+                                    new4=float(new3[:l-1])+float(new3[l+1:])
+                                    new5=new[:i]+str(new4)+new[j+1:]
+                                    new=new5
+                                    if new in oplist2:
+                                        new5= ['('+str(new)+')']
+                                        new=new5
+                                    l=len(new3)    
+                                else:
+                                    l+=1
                             i=0
                             j=0
                             count+=new.count("(") 
-                            print(new)
                         elif '-' in new3:
-                            new4=float(new3[0])-float(new3[2])   
-                        elif '/' in new3:
-                            new4=float(new3[0])/float(new3[2])    
-                        elif '*' in new3:
-                            new4=float(new3[0])*float(new3[2])
-                        elif '**' in new3:
-                            new4=float(new3[0])**float(new3[2])  
-                        elif '%' in new3:
-                            new4=float(new3[0])%float(new3[2])
+                            l=0
+                            while l<len(new3):
+                                if new3[l] in oplist2:    
+                                    new4=float(new3[:l-1])-float(new3[l+1:])
+                                    new5=new[:i]+str(new4)+new[j+1:]
+                                    new=new5
+                                    if new in oplist2:
+                                        new5= ['('+str(new)+')']
+                                        new=new5
+                                    l=len(new3)    
+                                else:
+                                    l+=1
+                            i=0
+                            j=0
+                            count+=new.count("(")   
                         elif '//' in new3:
-                            new4=float(new3[0])//float(new3[2])    
-                           
+                            l=0
+                            while l<len(new3):
+                                if new3[l] in oplist2:    
+                                    new4=float(new3[:l-1])//float(new3[l+2:])
+                                    new5=new[:i]+str(new4)+new[j+1:]
+                                    new=new5
+                                    if new in oplist2:
+                                        new5= ['('+str(new)+')']
+                                        new=new5
+                                    l=len(new3)    
+                                else:
+                                    l+=1
+                            i=0
+                            j=0
+                            count+=new.count("(") 
+                        elif '/' in new3:
+                            l=0
+                            while l<len(new3):
+                                if new3[l] in oplist2:    
+                                    new4=float(new3[:l-1])/float(new3[l+1:])
+                                    new5=new[:i]+str(new4)+new[j+1:]
+                                    new=new5
+                                    if new in oplist2:
+                                        new5= ['('+str(new)+')']
+                                        new=new5
+                                    l=len(new3)    
+                                else:
+                                    l+=1
+                            i=0
+                            j=0
+                            count+=new.count("(")    
+                        elif '**' in new3:
+                            l=0
+                            while l<len(new3):
+                                if new3[l] in oplist2:    
+                                    new4=float(new3[:l-1])**float(new3[l+2:])
+                                    new5=new[:i]+str(new4)+new[j+1:]
+                                    new=new5
+                                    if new in oplist2:
+                                        new5= ['('+str(new)+')']
+                                        new=new5
+                                    l=len(new3)    
+                                else:
+                                    l+=1
+                            i=0
+                            j=0
+                            count+=new.count("(")
+                        elif '*' in new3:
+                            l=0
+                            while l<len(new3):
+                                if new3[l] in oplist2:    
+                                    new4=float(new3[:l-1])*float(new3[l+1:])
+                                    new5=new[:i]+str(new4)+new[j+1:]
+                                    new=new5
+                                    if new in oplist2:
+                                        new5= ['('+str(new)+')']
+                                        new=new5
+                                    l=len(new3)    
+                                else:
+                                    l+=1
+                            i=0
+                            j=0
+                            count+=new.count("(")
+                        elif '%' in new3:
+                            l=0
+                            while l<len(new3):
+                                if new3[l] in oplist2:    
+                                    new4=float(new3[:l-1])%float(new3[l+1:])
+                                    new5=new[:i]+str(new4)+new[j+1:]
+                                    new=new5
+                                    if new in oplist2:
+                                        new5= ['('+str(new)+')']
+                                        new=new5
+                                    l=len(new3)    
+                                else:
+                                    l+=1
+                            i=0
+                            j=0
+                            count+=new.count("(")
                     j+=1
                 i+=1
-            count-=1
-            i+=1
-            
-            #else:
-             #   continue
+            else:
+                count-=1
+                i+=1
         else:
             i+=1
-    new=new.split()
-            
-    print(new, type(new))
-        
-    
-    
+    new6=0
+    k=0
+    while k<len(new):
+        if new[k] not in oplist:
+            new6+=float(new[k:])
+            k=len(new)
+        else:
+            k+=1
+    new=new6        
     return new
-
     
 class Constant(Expression):
     """Represents a constant value"""
