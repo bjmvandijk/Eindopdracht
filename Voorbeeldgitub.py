@@ -162,9 +162,21 @@ class Expression():
                 # a constant, push it to the stack
                 stack.append(t)
         # the resulting expression tree is what's left on the stack
-        stack[0]=stack[0].minimum()
-        #ans=stack[0].Expression()
-        #print(ans, type(ans))
+        #stack[0]=stack[0].minimum()
+        #ans=Expression.__str__(stack[0])
+        ans=0
+        '''for i in stack[0]:
+            print(i)
+            oplist = ['+', '-', '*', '/', '**', '%', '//', '(', ')']
+            if i in oplist:
+                ans+=i
+            else:    
+                try: 
+                    ans+=Constant(i)
+                except:
+                    ans+=Variable(i)
+            
+        print(ans, type(ans))'''
         return stack[0]
 
 def replace(self,var=None):
