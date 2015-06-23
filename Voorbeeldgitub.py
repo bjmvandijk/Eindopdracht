@@ -87,13 +87,13 @@ class Expression():
 
     def __floordiv__(self, other):
         return FloorDivNode(self, other)
-    #def __Variable__(self,other)    
-    def __str__(self,var=None):
-        def evaluate(self, var=None):
-            ans = evaluate(self,var)
-            return ans
-        ans=replace(self,var)
-        return ans 
+
+    #def __str__(self,var=None):
+    #    def evaluate(self, var=None):
+    #        ans = evaluate(self,var)
+    #        return ans
+    #    ans=replace(self,var)
+    #    return ans 
 
     # basic Shunting-yard algorithm
     def fromString(string):
@@ -218,7 +218,7 @@ def evaluate(self, var=None):
                                     k = (len(calc) + 1)
                                 else:
                                     k += 1
-                            j =- 1
+                            j -= 1
                             i = 0
                         else:
                             j -= 1
@@ -234,7 +234,7 @@ def evaluate(self, var=None):
                                     k = (len(calc) + 1)
                                 else:
                                     k += 1
-                            j =- 1
+                            j -= 1
                             i = 0
                         else:
                             j -= 1
@@ -250,7 +250,7 @@ def evaluate(self, var=None):
                                     k = (len(calc) + 1)
                                 else:
                                     k += 1
-                            j =- 1
+                            j -= 1
                             i = 0
                         else:
                             j -= 1
@@ -267,7 +267,7 @@ def evaluate(self, var=None):
                                     k = (len(calc) + 1)
                                 else:
                                     k += 1
-                            j =- 1
+                            j -= 1
                             i = 0
                         else:
                             j -= 1
@@ -284,7 +284,7 @@ def evaluate(self, var=None):
                                     k = (len(calc) + 1)
                                 else:
                                     k += 1
-                            j =- 1
+                            j -= 1
                             i = 0
                         else:
                             j -= 1            
@@ -300,7 +300,7 @@ def evaluate(self, var=None):
                                     k = (len(calc) + 1)
                                 else:
                                     k += 1
-                            j =- 1
+                            j -= 1
                             i = 0
                         else:
                             j -= 1
@@ -316,7 +316,7 @@ def evaluate(self, var=None):
                                     k = (len(calc) + 1)
                                 else:
                                     k += 1
-                            j =- 1
+                            j -= 1
                             i = 0
                         else:
                             j -= 1            
@@ -511,10 +511,11 @@ class Constant(Expression):
 class Variable(Expression):
     """Represents a variable"""
     def __init__(self, variable):
-        self.variable=variable
+        self.variable = variable
+
     def __eq__(self, other):
-        if isinstance(other, Constant):
-            return self.variable == other.value
+        if isinstance(other, Variable):
+            return self.variable == other.variable
         else:
             return False
         
@@ -527,7 +528,21 @@ class Variable(Expression):
         
     def __float__(self):
         return float(self.variable)    
-        
+
+class Function(Expression):
+    """Represents a function"""
+    def __init__(self, function):
+        self.function = function
+
+    def __eq__(self, other):
+        if isinstance(other, Function):
+            return self.function == other.function
+        else:
+            return False
+
+    def __str__(self):
+        return str(self.function)
+
 class BinaryNode(Expression):
     """A node in the expression tree representing a binary operator."""
     
@@ -557,7 +572,7 @@ class AddNode(BinaryNode):
         super(AddNode, self).__init__(lhs, rhs, '+')
 
     def evaluate(self, var=None):
-        ans = evaluate(self,var)
+        ans = evaluate(self, var)
         return ans
         
     def minimum(self):
@@ -570,7 +585,7 @@ class SubNode(BinaryNode):
         super(SubNode, self).__init__(lhs, rhs, '-')
 
     def evaluate(self, var=None):
-        ans = evaluate(self,var)
+        ans = evaluate(self, var)
         return ans
         
     def minimum(self):
@@ -583,7 +598,7 @@ class MulNode(BinaryNode):
         super(MulNode, self).__init__(lhs, rhs, '*')
 
     def evaluate(self, var=None):
-        ans = evaluate(self,var)
+        ans = evaluate(self, var)
         return ans
         
     def minimum(self):
@@ -596,7 +611,7 @@ class DivNode(BinaryNode):
         super(DivNode, self).__init__(lhs, rhs, '/')
 
     def evaluate(self, var=None):
-        ans = evaluate(self,var)
+        ans = evaluate(self, var)
         return ans
         
     def minimum(self):
@@ -609,7 +624,7 @@ class PowNode(BinaryNode):
         super(PowNode, self).__init__(lhs, rhs, '**')
 
     def evaluate(self, var=None):
-        ans = evaluate(self,var)
+        ans = evaluate(self, var)
         return ans
         
     def minimum(self):
@@ -622,7 +637,7 @@ class ModNode(BinaryNode):
         super(ModNode, self).__init__(lhs, rhs, '%')
 
     def evaluate(self, var=None):
-        ans = evaluate(self,var)
+        ans = evaluate(self, var)
         return ans
         
     def minimum(self):
@@ -635,7 +650,7 @@ class FloorDivNode(BinaryNode):
         super(FloorDivNode, self).__init__(lhs, rhs, '//')
 
     def evaluate(self, var=None):
-        ans = evaluate(self,var)
+        ans = evaluate(self, var)
         return ans
         
     def minimum(self):
