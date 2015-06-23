@@ -143,6 +143,7 @@ class Expression():
         return stack[0]
 
 def evaluate(self):
+<<<<<<< HEAD
         
     new = str(self)
     
@@ -203,8 +204,156 @@ def evaluate(self):
         
     
     
+=======
+    new =str(self)
+    oplist = ['+', '-', '*', '/', '**', '%', '//', '(', ')']
+    oplist2 = ['+','-','*','/','**', '%','//']
+    count=0
+    count+=new.count("(") 
+    i=0
+    j=0
+    while i<len(new):
+        if new[i]=='(':
+            if count==1:
+                j=i
+                while j<len(new):
+                    if new[j]==')':
+                        new2=new[i:j+1]
+                        new3=str()
+                        for k in new2:
+                            oplist3=[' ','(',')']
+                            if k not in oplist3:
+                                new3+=k
+                        if '+' in new3:
+                            l=0
+                            while l<len(new3):
+                                if new3[l] in oplist2:    
+                                    new4=float(new3[:l-1])+float(new3[l+1:])
+                                    new5=new[:i]+str(new4)+new[j+1:]
+                                    new=new5
+                                    if new in oplist2:
+                                        new5= ['('+str(new)+')']
+                                        new=new5
+                                    l=len(new3)    
+                                else:
+                                    l+=1
+                            i=0
+                            j=0
+                            count+=new.count("(") 
+                        elif '-' in new3:
+                            l=0
+                            while l<len(new3):
+                                if new3[l] in oplist2:    
+                                    new4=float(new3[:l-1])-float(new3[l+1:])
+                                    new5=new[:i]+str(new4)+new[j+1:]
+                                    new=new5
+                                    if new in oplist2:
+                                        new5= ['('+str(new)+')']
+                                        new=new5
+                                    l=len(new3)    
+                                else:
+                                    l+=1
+                            i=0
+                            j=0
+                            count+=new.count("(")   
+                        elif '//' in new3:
+                            l=0
+                            while l<len(new3):
+                                if new3[l] in oplist2:    
+                                    new4=float(new3[:l-1])//float(new3[l+2:])
+                                    new5=new[:i]+str(new4)+new[j+1:]
+                                    new=new5
+                                    if new in oplist2:
+                                        new5= ['('+str(new)+')']
+                                        new=new5
+                                    l=len(new3)    
+                                else:
+                                    l+=1
+                            i=0
+                            j=0
+                            count+=new.count("(") 
+                        elif '/' in new3:
+                            l=0
+                            while l<len(new3):
+                                if new3[l] in oplist2:    
+                                    new4=float(new3[:l-1])/float(new3[l+1:])
+                                    new5=new[:i]+str(new4)+new[j+1:]
+                                    new=new5
+                                    if new in oplist2:
+                                        new5= ['('+str(new)+')']
+                                        new=new5
+                                    l=len(new3)    
+                                else:
+                                    l+=1
+                            i=0
+                            j=0
+                            count+=new.count("(")    
+                        elif '**' in new3:
+                            l=0
+                            while l<len(new3):
+                                if new3[l] in oplist2:    
+                                    new4=float(new3[:l-1])**float(new3[l+2:])
+                                    new5=new[:i]+str(new4)+new[j+1:]
+                                    new=new5
+                                    if new in oplist2:
+                                        new5= ['('+str(new)+')']
+                                        new=new5
+                                    l=len(new3)    
+                                else:
+                                    l+=1
+                            i=0
+                            j=0
+                            count+=new.count("(")
+                        elif '*' in new3:
+                            l=0
+                            while l<len(new3):
+                                if new3[l] in oplist2:    
+                                    new4=float(new3[:l-1])*float(new3[l+1:])
+                                    new5=new[:i]+str(new4)+new[j+1:]
+                                    new=new5
+                                    if new in oplist2:
+                                        new5= ['('+str(new)+')']
+                                        new=new5
+                                    l=len(new3)    
+                                else:
+                                    l+=1
+                            i=0
+                            j=0
+                            count+=new.count("(")
+                        elif '%' in new3:
+                            l=0
+                            while l<len(new3):
+                                if new3[l] in oplist2:    
+                                    new4=float(new3[:l-1])%float(new3[l+1:])
+                                    new5=new[:i]+str(new4)+new[j+1:]
+                                    new=new5
+                                    if new in oplist2:
+                                        new5= ['('+str(new)+')']
+                                        new=new5
+                                    l=len(new3)    
+                                else:
+                                    l+=1
+                            i=0
+                            j=0
+                            count+=new.count("(")
+                    j+=1
+                i+=1
+            else:
+                count-=1
+                i+=1
+        else:
+            i+=1
+    new6=0
+    k=0
+    while k<len(new):
+        if new[k] not in oplist:
+            new6+=float(new[k:])
+            k=len(new)
+        else:
+            k+=1
+    new=new6        
+>>>>>>> a05c331bdd926da5f45ed637917b741c21191488
     return new
-
     
 class Constant(Expression):
     """Represents a constant value"""
