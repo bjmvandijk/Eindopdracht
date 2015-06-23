@@ -366,6 +366,7 @@ def minimum(self):
     j = 0
     while i < len(new):
         if new[i] in oplist:
+            # define the importance of + and -
             if new[i] in oplist2:
                 j = i + 1
                 while j < len(new):
@@ -394,11 +395,12 @@ def minimum(self):
                             j = len(new)
                     else:
                         j += 1
+            # define the importance of * and /
             elif new[i] in oplist3:
                 j = i + 1
                 while j < len(new):
                     if new[j] in oplist:
-                        if new[j] in oplist3 or new[j] in oplist2:
+                        if new[j] in oplist3 or new[j] in oplist2:  #????????????????
                             new1 = new[i:j]
                             new2 = str()
                             for k in new1:
@@ -421,8 +423,9 @@ def minimum(self):
                         else:
                             j = len(new)
                     else:
-                        j += 1 
-            if new[i] in oplist4:
+                        j += 1
+            # define the importance of ** 
+            elif new[i] in oplist4:
                 j = i + 1
                 while j < len(new):
                     if new[j] in oplist:
@@ -449,7 +452,36 @@ def minimum(self):
                         else:
                             j = len(new)
                     else:
-                        j += 1            
+                        j += 1   
+            # define the importance of % and //
+            elif new[i] in oplist5:
+                j = i + 1
+                while j < len(new):
+                    if new[j] in oplist:
+                        if new[j] in oplist5:
+                            new1 = new[i:j]
+                            new2 = str()
+                            for k in new1:
+                                if k is not ')':
+                                    new2 += k
+                            new3 = str()
+                            new3 = new[0:i] + new2 + new3[l+1:]
+                            l = i
+                            while l >= 0:
+                                if new3[l] == '(':
+                                    new4 = str()
+                                    new4 = new3[:l] + new3[l+1:]
+                                    new = new4
+                                    i = 0
+                                    j = 0
+                                    l += 1
+                                else:
+                                    l -= 1
+                            j = len(new)    
+                        else:
+                            j = len(new)
+                    else:
+                        j += 1  
             i = len(new)
         else:
            i += 1
