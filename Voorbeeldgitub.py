@@ -95,8 +95,6 @@ class Expression():
         ans=replace(self,var)
         return ans 
 
-    # TODO: other overloads, such as __sub__, __mul__, __truediv__, __pow__, __mod__, __floordiv__ etc.
-    
     # basic Shunting-yard algorithm
     def fromString(string):
         # split into tokens
@@ -162,212 +160,198 @@ class Expression():
                 # a constant, push it to the stack
                 stack.append(t)
         # the resulting expression tree is what's left on the stack
-        stack[0]=stack[0].minimum()
-        #ans=stack[0].Expression()
-        #print(ans, type(ans))
+        #stack[0]=stack[0].minimum()
+        #ans=Expression.__str__(stack[0])
+        ans=0
+        '''for i in stack[0]:
+            print(i)
+            oplist = ['+', '-', '*', '/', '**', '%', '//', '(', ')']
+            if i in oplist:
+                ans+=i
+            else:    
+                try: 
+                    ans+=Constant(i)
+                except:
+                    ans+=Variable(i)
+            
+        print(ans, type(ans))'''
         return stack[0]
 
-def replace(self,var=None):
-        self=str(self)
-        if var==None:
+def replace(self, var=None):
+        self = str(self)
+        if var == None:
             return self
         else:
-            
-            ans=str()
+            ans = str()
             for i in self:
                 if i in var:
-                    j=var.get(i)
-                    
-                    ans+=str(j)
-                    
+                    j = var.get(i)
+                    ans += str(j)
                 else:
-                    ans+=str(i)    
-            self=ans
+                    ans += str(i)    
+            self = ans
             return self
         
-def evaluate(self,var=None):
-    new=replace(self,var) 
-   
-    oplist = ['+', '-', '*', '/', '**', '%', '//', '(', ')']
-    oplist2 = ['+','-','*','/','**', '%','//']
-    i=0
+def evaluate(self, var=None):
+    new = replace(self,var) 
+    charlist = ['+', '-', '*', '/', '**', '%', '//', '(', ')']
+    oplist = ['+', '-', '*', '/', '**', '%', '//']
+    i = 0
     
     def calc(string):
-        calc=str(string)
-        i=0
-        j=0
-        k=0
-        newcalc=0
-        while i<len(calc):
-            if calc[i] in oplist2:
-                
-                if calc[i]=='+':
-                    j=i-1
-                    while j>=0:
-                        if calc[j] in oplist:
-                            
-                            k=i+1
-                            while k<=len(calc):
-                                if calc[k] in oplist:
-                                    
-                                    newcalc+=float(calc[j+1:i])+float(calc[i+1:k])
-                                    
-                                    calc=calc[:j]+str(newcalc)+calc[k:]
-                                    k=(len(calc)+1)
+        calc = str(string)
+        i = 0
+        j = 0
+        k = 0
+        newcalc = 0
+        while i < len(calc):
+            if calc[i] in oplist:
+                if calc[i] == '+':
+                    j = i - 1
+                    while j >= 0:
+                        if calc[j] in charlist:
+                            k = i + 1
+                            while k <= len(calc):
+                                if calc[k] in charlist:
+                                    newcalc += float(calc[j+1:i]) + float(calc[i+1:k])
+                                    calc = calc[:j] + str(newcalc) + calc[k:]
+                                    k = (len(calc) + 1)
                                 else:
-                                    k+=1
-                            j=-1
-                            i=0
+                                    k += 1
+                            j =- 1
+                            i = 0
                         else:
-                            j-=1
-                if calc[i]=='-':
-                    j=i-1
-                    while j>=0:
-                        if calc[j] in oplist:
-                            
-                            k=i+1
-                            while k<=len(calc):
-                                if calc[k] in oplist:
-                                    
-                                    newcalc+=float(calc[j+1:i])-float(calc[i+1:k])
-                                    
-                                    calc=calc[:j]+str(newcalc)+calc[k:]
-                                    k=(len(calc)+1)
+                            j -= 1
+                if calc[i] == '-':
+                    j = i - 1
+                    while j >= 0:
+                        if calc[j] in charlist:
+                            k = i + 1
+                            while k <= len(calc):
+                                if calc[k] in charlist:
+                                    newcalc += float(calc[j+1:i]) - float(calc[i+1:k])
+                                    calc = calc[:j] + str(newcalc) + calc[k:]
+                                    k = (len(calc) + 1)
                                 else:
-                                    k+=1
-                            j=-1
-                            i=0
+                                    k += 1
+                            j =- 1
+                            i = 0
                         else:
-                            j-=1
-                if calc[i]=='*' and calc[i+1]=='*':
-                    j=i-1
-                    while j>=0:
-                        if calc[j] in oplist:
-                            
-                            k=i+2
-                            while k<=len(calc):
-                                if calc[k] in oplist:
-                                    
-                                    newcalc+=float(calc[j+1:i])**float(calc[i+2:k])
-                                    
-                                    calc=calc[:j]+str(newcalc)+calc[k:]
-                                    k=(len(calc)+1)
+                            j -= 1
+                if calc[i] == '*' and calc[i+1] == '*':
+                    j = i - 1
+                    while j >= 0:
+                        if calc[j] in charlist:
+                            k = i + 2
+                            while k <= len(calc):
+                                if calc[k] in charlist:
+                                    newcalc += float(calc[j+1:i]) ** float(calc[i+2:k])
+                                    calc = calc[:j] + str(newcalc) + calc[k:]
+                                    k = (len(calc) + 1)
                                 else:
-                                    k+=1
-                            j=-1
-                            i=0
+                                    k += 1
+                            j =- 1
+                            i = 0
                         else:
-                            j-=1
-                if calc[i]=='/' and calc[i+1]=='/':
-                    j=i-1
-                    while j>=0:
-                        if calc[j] in oplist:
-                            
-                            k=i+2
-                            while k<=len(calc):
-                                if calc[k] in oplist:
+                            j -= 1
+                if calc[i] == '/' and calc[i+1] == '/':
+                    j = i - 1
+                    while j >= 0:
+                        if calc[j] in charlist:
+                            k = i + 2
+                            while k <= len(calc):
+                                if calc[k] in charlist:
+                                    newcalc += float(calc[j+1:i]) // float(calc[i+2:k])
                                     
-                                    newcalc+=float(calc[j+1:i])//float(calc[i+2:k])
-                                    
-                                    calc=calc[:j]+str(newcalc)+calc[k:]
-                                    k=(len(calc)+1)
+                                    calc = calc[:j] + str(newcalc) + calc[k:]
+                                    k = (len(calc) + 1)
                                 else:
-                                    k+=1
-                            j=-1
-                            i=0
+                                    k += 1
+                            j =- 1
+                            i = 0
                         else:
-                            j-=1
-                if calc[i]=='*':
-                    j=i-1
-                    while j>=0:
-                        if calc[j] in oplist:
-                            
-                            k=i+1
-                            while k<=len(calc):
-                                if calc[k] in oplist:
+                            j -= 1
+                if calc[i] == '*':
+                    j = i - 1
+                    while j >= 0:
+                        if calc[j] in charlist:
+                            k = i + 1
+                            while k <= len(calc):
+                                if calc[k] in charlist:
+                                    newcalc += float(calc[j+1:i]) * float(calc[i+1:k])
                                     
-                                    newcalc+=float(calc[j+1:i])*float(calc[i+1:k])
-                                    
-                                    calc=calc[:j]+str(newcalc)+calc[k:]
-                                    k=(len(calc)+1)
+                                    calc = calc[:j] + str(newcalc) + calc[k:]
+                                    k = (len(calc) + 1)
                                 else:
-                                    k+=1
-                            j=-1
-                            i=0
+                                    k += 1
+                            j =- 1
+                            i = 0
                         else:
-                            j-=1            
-                if calc[i]=='/':
-                    j=i-1
-                    while j>=0:
-                        if calc[j] in oplist:
-                            
-                            k=i+1
-                            while k<=len(calc):
-                                if calc[k] in oplist:
-                                    
-                                    newcalc+=float(calc[j+1:i])/float(calc[i+1:k])
-                                    
-                                    calc=calc[:j]+str(newcalc)+calc[k:]
-                                    k=(len(calc)+1)
+                            j -= 1            
+                if calc[i]== '/':
+                    j = i - 1
+                    while j >= 0:
+                        if calc[j] in charlist:
+                            k = i + 1
+                            while k <= len(calc):
+                                if calc[k] in charlist:
+                                    newcalc += float(calc[j+1:i]) / float(calc[i+1:k])
+                                    calc = calc[:j] + str(newcalc) + calc[k:]
+                                    k = (len(calc) + 1)
                                 else:
-                                    k+=1
-                            j=-1
-                            i=0
+                                    k += 1
+                            j =- 1
+                            i = 0
                         else:
-                            j-=1
-                if calc[i]=='%':
-                    j=i-1
-                    while j>=0:
-                        if calc[j] in oplist:
-                            
-                            k=i+1
-                            while k<=len(calc):
-                                if calc[k] in oplist:
-                                    
-                                    newcalc+=float(calc[j+1:i])%float(calc[i+1:k])
-                                    
-                                    calc=calc[:j]+str(newcalc)+calc[k:]
-                                    k=(len(calc)+1)
+                            j -= 1
+                if calc[i] == '%':
+                    j = i - 1
+                    while j >= 0:
+                        if calc[j] in charlist:
+                            k = i + 1
+                            while k <= len(calc):
+                                if calc[k] in charlist:
+                                    newcalc += float(calc[j+1:i]) % float(calc[i+1:k])
+                                    calc = calc[:j] + str(newcalc) + calc[k:]
+                                    k = (len(calc) + 1)
                                 else:
-                                    k+=1
-                            j=-1
-                            i=0
+                                    k += 1
+                            j =- 1
+                            i = 0
                         else:
-                            j-=1            
+                            j -= 1            
                 else:
-                    i+=1
-                    
+                    i += 1
             else:
-                i+=1
-        newcalc=str()
-        remove=str()
+                i += 1
+        newcalc = str()
+        remove = str()
         for i in calc:
-            if i=='(' or i==')':
-                remove+=i
+            if i== '(' or i == ')':
+                remove += i
             else:
-                newcalc+=i
-        calc=newcalc        
+                newcalc += i
+        calc = newcalc        
         return calc
-    count=new.count("(") 
-    while i<len(new):
-        if new[i]=='(':
-            if count==1:    
-                j=i+1
-                while j<len(new):
-                    if new[j]==')':
-                        ans=(calc(new[i:j+1]))
-                        new=new[:i]+str(ans)+new[j+1:]
-                        j=len(new)
-                        i=0
-                        count=new.count("(")
+    count = new.count("(") 
+    while i < len(new):
+        if new[i] == '(':
+            if count == 1:    
+                j = i + 1
+                while j < len(new):
+                    if new[j] == ')':
+                        ans = (calc(new[i:j + 1]))
+                        new = new[:i] + str(ans) + new[j+1:]
+                        j = len(new)
+                        i = 0
+                        count = new.count("(")
                     else:
-                        j+=1
+                        j += 1
             else:
-                count-=1
-                i+=1
+                count -= 1
+                i += 1
         else:
-            i+=1
-    
+            i += 1
     return new
 
 def minimum(self):
@@ -375,102 +359,100 @@ def minimum(self):
     oplist2 = ['+','-']
     oplist3 = ['*','/']
     oplist4 = ['**']
-    oplist5 = ['%']
-    oplist6 = ['//']
-    new=(str(self))
-    i=0
-    j=0
-    while i<len(new):
+    oplist5 = ['%', '//']
+    #oplist6 = ['//']
+    new = (str(self))
+    i = 0
+    j = 0
+    while i < len(new):
         if new[i] in oplist:
             if new[i] in oplist2:
-                j=i+1
-                while j<len(new):
+                j = i + 1
+                while j < len(new):
                     if new[j] in oplist:
                         if new[j] in oplist2:
-                            new1=new[i:j]
-                            new2=str()
+                            new1 = new[i:j]
+                            new2 = str()
                             for k in new1:
                                 if k is not ')':
-                                    new2+=k
-                            new3=str()
-                            new3=new[0:i]+new2+new[j:len(new)]
-                            l=i
-                            while l>=0:
-                                if new3[l]=='(':
-                                    new4=str()
-                                    new4=new3[:l]+new3[l+1:]
-                                    new=new4
-                                    i=0
-                                    j=0
-                                    l=-1
+                                    new2 += k
+                            new3 = str()
+                            new3 = new[0:i] + new2 + new[j:len(new)]
+                            l = i
+                            while l >= 0:
+                                if new3[l] == '(':
+                                    new4 = str()
+                                    new4 = new3[:l] + new3[l+1:]
+                                    new = new4
+                                    i = 0
+                                    j = 0
+                                    l =- 1
                                 else:
-                                    l-=1
-                                    
-                            j=len(new)    
+                                    l -= 1
+                            j = len(new)    
                         else:
-                            j=len(new)
+                            j = len(new)
                     else:
-                        j+=1
+                        j += 1
             elif new[i] in oplist3:
-                j=i+1
-                while j<len(new):
+                j = i + 1
+                while j < len(new):
                     if new[j] in oplist:
                         if new[j] in oplist3 or new[j] in oplist2:
-                            new1=new[i:j]
-                            new2=str()
+                            new1 = new[i:j]
+                            new2 = str()
                             for k in new1:
                                 if k is not ')':
-                                    new2+=k
-                            new3=str()
-                            new3=new[0:i]+new2+new[j:len(new)]
-                            l=i
-                            while l>=0:
-                                if new3[l]=='(':
-                                    new4=str()
-                                    new4=new3[:l]+new3[l+1:]
-                                    new=new4
-                                    i=0
-                                    j=0
-                                    l=-1
+                                    new2 += k
+                            new3 = str()
+                            new3 = new[0:i] + new2 + new[j:len(new)]
+                            l = i
+                            while l >= 0:
+                                if new3[l] == '(':
+                                    new4 = str()
+                                    new4 = new3[:l] + new3[l+1:]
+                                    new = new4
+                                    i = 0
+                                    j = 0
+                                    l =- 1
                                 else:
-                                    l-=1
-                            j=len(new)    
+                                    l -= 1
+                            j = len(new)    
                         else:
-                            j=len(new)
+                            j = len(new)
                     else:
-                        j+=1 
+                        j += 1 
             if new[i] in oplist4:
-                j=i+1
-                while j<len(new):
+                j = i + 1
+                while j < len(new):
                     if new[j] in oplist:
                         if new[j] in oplist4:
-                            new1=new[i:j]
-                            new2=str()
+                            new1 = new[i:j]
+                            new2 = str()
                             for k in new1:
                                 if k is not ')':
-                                    new2+=k
-                            new3=str()
-                            new3=new[0:i]+new2+new[j:len(new)]
-                            l=i
-                            while l>=0:
-                                if new3[l]=='(':
-                                    new4=str()
-                                    new4=new3[:l]+new3[l+1:]
-                                    new=new4
-                                    i=0
-                                    j=0
-                                    l=-1
+                                    new2 += k
+                            new3 = str()
+                            new3 = new[0:i] + new2 + new[j:len(new)]
+                            l = i
+                            while l >= 0:
+                                if new3[l] == '(':
+                                    new4 = str()
+                                    new4 = new3[:l] + new3[l+1:]
+                                    new = new4
+                                    i = 0
+                                    j = 0
+                                    l =- 1
                                 else:
-                                    l-=1
-                            j=len(new)    
+                                    l -= 1
+                            j = len(new)    
                         else:
-                            
-                            j=len(new)
+                            j = len(new)
                     else:
-                        j+=1            
-            i=len(new)
+                        j += 1            
+            i = len(new)
         else:
-           i+=1
+           i += 1
     return new
     
 class Constant(Expression):
@@ -542,35 +524,10 @@ class AddNode(BinaryNode):
     def __init__(self, lhs, rhs):
         super(AddNode, self).__init__(lhs, rhs, '+')
 
-    def evaluate(self):
-        new=self
-        new=str(self)
-        oplist = ['+','-','*','/','**']
-        oplist2 = ['(','+','-','*','/','**',')']
-        new1=0
-        new2=[]
-        for i in new:
-            if i is not ' ':
-                new2+=i
-        
-        for i in new2:
-            if i not in oplist2:
-                new2=float(i)
-                new1+=new2
-                '''try:
-                    new1={i+1,i}
-                except:
-                    new1={}
-                '''
-        print(new1, 'bitches')        
-        print(new2)
-        return new1
-        
-
     def evaluate(self, var=None):
         ans = evaluate(self,var)
         return ans
-    	
+        
     def minimum(self):
         ans = minimum(self)
         return ans
@@ -580,42 +537,13 @@ class SubNode(BinaryNode):
     def __init__(self, lhs, rhs):
         super(SubNode, self).__init__(lhs, rhs, '-')
 
-    def evaluate(self):   
-        new=self
-        new=str(self)
-        oplist = ['+', '-', '*', '/', '**', '%', '//']
-        oplist2 = ['(','+','-','*','/','**',')']
-        new1=0
-        new2=str()
-        for i in new:
-            if i is not ' ':
-                new2+=i
-        for i in new2:
-            if i not in oplist2:
-                if i==new[1]:
-                    new2=float(i)
-                    new1=new2
-                else:    
-                    new2=float(i)
-                    new1-=new2
-                '''try:
-                    new1={i+1,i}
-                except:
-                    new1={}
-                '''
-        print(new1, 'hell yeah')        
-        #print(new,new[0])
-        return new1
-        
-# TODO: add more subclasses of Expression to represent operators, variables, functions, etc.
-
     def evaluate(self, var=None):
         ans = evaluate(self,var)
         return ans
-    	
+        
     def minimum(self):
         ans = minimum(self)
-        return ans	
+        return ans  
 
 class MulNode(BinaryNode):
     """Represents the multiplication operator"""
@@ -625,10 +553,10 @@ class MulNode(BinaryNode):
     def evaluate(self, var=None):
         ans = evaluate(self,var)
         return ans
-    	
+        
     def minimum(self):
         ans = minimum(self)
-        return ans	
+        return ans  
         
 class DivNode(BinaryNode):
     """Represents the division operator"""
@@ -638,10 +566,10 @@ class DivNode(BinaryNode):
     def evaluate(self, var=None):
         ans = evaluate(self,var)
         return ans
-    	
+        
     def minimum(self):
         ans = minimum(self)
-        return ans	
+        return ans  
 
 class PowNode(BinaryNode):
     """Represents the power operator"""
@@ -651,10 +579,10 @@ class PowNode(BinaryNode):
     def evaluate(self, var=None):
         ans = evaluate(self,var)
         return ans
-    	
+        
     def minimum(self):
         ans = minimum(self)
-        return ans	
+        return ans  
 
 class ModNode(BinaryNode):
     """Represents the modulus operator"""
@@ -664,10 +592,10 @@ class ModNode(BinaryNode):
     def evaluate(self, var=None):
         ans = evaluate(self,var)
         return ans
-    	
+        
     def minimum(self):
         ans = minimum(self)
-        return ans	
+        return ans  
 
 class FloorDivNode(BinaryNode):
     """Represents the floor division operator"""
@@ -677,7 +605,7 @@ class FloorDivNode(BinaryNode):
     def evaluate(self, var=None):
         ans = evaluate(self,var)
         return ans
-    	
+        
     def minimum(self):
         ans = minimum(self)
-        return ans	
+        return ans  
