@@ -163,8 +163,8 @@ class Expression():
                 stack.append(t)
         # the resulting expression tree is what's left on the stack
         stack[0]=stack[0].minimum()
-        ans=stack[0].Expression()
-        print(ans, type(ans))
+        #ans=stack[0].Expression()
+        #print(ans, type(ans))
         return stack[0]
 
 def replace(self,var=None):
