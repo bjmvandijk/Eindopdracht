@@ -178,7 +178,7 @@ class AddNode(BinaryNode):
         oplist = ['+','-','*','/','**']
         oplist2 = ['(','+','-','*','/','**',')']
         new1=0
-        new2=str()
+        new2=[]
         for i in new:
             if i is not ' ':
                 new2+=i
@@ -193,7 +193,7 @@ class AddNode(BinaryNode):
                     new1={}
                 '''
         print(new1, 'bitches')        
-        #print(new,new[0])
+        print(new2)
         return new1
         
 class SubNode(BinaryNode):
@@ -204,7 +204,7 @@ class SubNode(BinaryNode):
         
         new=self
         new=str(self)
-        oplist = ['+','-','*','/','**']
+        oplist = ['+', '-', '*', '/', '**', '%', '//']
         oplist2 = ['(','+','-','*','/','**',')']
         new1=0
         new2=str()
