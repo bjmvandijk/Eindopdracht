@@ -192,7 +192,7 @@ def replace(self, var=None):
             self = ans
             return self
         
-def evaluate(self, var=None):
+'''def evaluate(self, var=None):
     new = replace(self,var) 
     charlist = ['+', '-', '*', '/', '**', '%', '//', '(', ')']
     oplist = ['+', '-', '*', '/', '**', '%', '//']
@@ -353,7 +353,7 @@ def evaluate(self, var=None):
         else:
             i += 1
     return new
-
+'''
 def minimum(self):
     oplist = ['+', '-', '*', '/', '**', '%', '//']
     oplist2 = ['+','-']
@@ -507,7 +507,9 @@ class Constant(Expression):
         
     def __float__(self):
         return float(self.value)
-
+        
+    def evaluate(self,dic):
+        return float(self)
 class Variable(Expression):
     """Represents a variable"""
     def __init__(self, variable):
@@ -521,6 +523,10 @@ class Variable(Expression):
         
     def __str__(self):
         return str(self.variable)
+        
+    def evaluate(self,dic):
+        return dic[self.variable]
+        
         
     # allow conversion to numerical values (if possible)
     def __int__(self):
@@ -566,14 +572,19 @@ class BinaryNode(Expression):
         # TODO: do we always need parantheses?
         return "(%s %s %s)" % (lstring, self.op_symbol, rstring)
         
+    def evaluate(self, dic=None):
+        lhsEval = self.lhs.evaluate(dic)
+        rhsEval = self.rhs.evaluate(dic)
+        return eval("%s %s %s" % (lhsEval, self.op_symbol, rhsEval))    
+        
 class AddNode(BinaryNode):
     """Represents the addition operator"""
     def __init__(self, lhs, rhs):
         super(AddNode, self).__init__(lhs, rhs, '+')
 
-    def evaluate(self, var=None):
-        ans = evaluate(self, var)
-        return ans
+    """ def evaluate(self, var=None):
+        ans = BinaryNode(Expression).evaluate(self)
+        return ans"""
         
     def minimum(self):
         ans = minimum(self)
@@ -584,9 +595,6 @@ class SubNode(BinaryNode):
     def __init__(self, lhs, rhs):
         super(SubNode, self).__init__(lhs, rhs, '-')
 
-    def evaluate(self, var=None):
-        ans = evaluate(self, var)
-        return ans
         
     def minimum(self):
         ans = minimum(self)
@@ -597,10 +605,6 @@ class MulNode(BinaryNode):
     def __init__(self, lhs, rhs):
         super(MulNode, self).__init__(lhs, rhs, '*')
 
-    def evaluate(self, var=None):
-        ans = evaluate(self, var)
-        return ans
-        
     def minimum(self):
         ans = minimum(self)
         return ans  
@@ -610,10 +614,7 @@ class DivNode(BinaryNode):
     def __init__(self, lhs, rhs):
         super(DivNode, self).__init__(lhs, rhs, '/')
 
-    def evaluate(self, var=None):
-        ans = evaluate(self, var)
-        return ans
-        
+
     def minimum(self):
         ans = minimum(self)
         return ans  
@@ -623,9 +624,7 @@ class PowNode(BinaryNode):
     def __init__(self, lhs, rhs):
         super(PowNode, self).__init__(lhs, rhs, '**')
 
-    def evaluate(self, var=None):
-        ans = evaluate(self, var)
-        return ans
+
         
     def minimum(self):
         ans = minimum(self)
@@ -636,10 +635,7 @@ class ModNode(BinaryNode):
     def __init__(self, lhs, rhs):
         super(ModNode, self).__init__(lhs, rhs, '%')
 
-    def evaluate(self, var=None):
-        ans = evaluate(self, var)
-        return ans
-        
+
     def minimum(self):
         ans = minimum(self)
         return ans  
@@ -649,10 +645,6 @@ class FloorDivNode(BinaryNode):
     def __init__(self, lhs, rhs):
         super(FloorDivNode, self).__init__(lhs, rhs, '//')
 
-    def evaluate(self, var=None):
-        ans = evaluate(self, var)
-        return ans
-        
     def minimum(self):
         ans = minimum(self)
         return ans  
