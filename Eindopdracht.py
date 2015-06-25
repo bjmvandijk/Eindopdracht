@@ -47,6 +47,14 @@ def isint(string):
     except ValueError:
         return False
 
+# check if a string represents a variable
+def isvar(string):
+    try:
+        str(string)
+        return True
+    except ValueError:
+        return False
+
 class Expression():
     """A mathematical expression, represented as an expression tree"""
     
@@ -101,6 +109,8 @@ class Expression():
                     output.append(Constant(int(token)))
                 else:
                     output.append(Constant(float(token)))
+            elif isvar(token) and token not in oplist:
+                output.append(Variable(str(token)))
             elif token in oplist:
                 # pop operators from the stack to the output until the top is no longer an operator
                 while True:
@@ -120,7 +130,7 @@ class Expression():
                     output.append(stack.pop())
                 # pop the left paranthesis from the stack (but not to the output)
                 stack.pop()
-############# TODO: do we need more kinds of tokens?
+############# TODO: do we need more kinds of tokens? misschien alleen nog een functie???
             else:
                 # unknown token
                 raise ValueError('Unknown token: %s' % token)
@@ -142,218 +152,11 @@ class Expression():
         # the resulting expression tree is what's left on the stack
         return stack[0]
 
-def evaluate(self):
-<<<<<<< HEAD
-        
-    new = str(self)
-    
-    
-    
-    charlist = ['+', '-', '*', '/', '**', '%', '//', '(', ')']
-    #oplist2 = ['(','+','-','*','/','**',')']
-    count = 0
-    
-    #for i in new:
-    count += new.count("(")    
-    i = 0
-    j = 0
-    
-    while i < len(new):
-        if new[i] == '(':
-            if count == 1:
-                i = j
-                while j < len(new):
-                    if new[j] == ')':
-                        print(new[i+1:j+1])
-                        new2 = new[i+1:j+1]
-                        new3 = str()
-                        for i in new2:
-                            charlist3=[' ', '(', ')']
-                            if i not in charlist3:
-                                new3 += i
-                        print(new3)        
-                        if '+' in new3:
-                            new4 = float(new3[0]) + float(new3[2])
-                        elif '-' in new3:
-                            new4 = float(new3[0]) - float(new3[2])   
-                        elif '/' in new3:
-                            new4 = float(new3[0]) / float(new3[2])    
-                        elif '*' in new3:
-                            new4 = float(new3[0]) * float(new3[2])
-                        elif '**' in new3:
-                            new4 = float(new3[0]) ** float(new3[2])  
-                        elif '%' in new3:
-                            new4 = float(new3[0]) % float(new3[2])
-                        elif '//' in new3:
-                            new4 = float(new3[0]) // float(new3[2])    
-                        print(new4)    
-                        j = (len(new)-1)
-                        i = (len(new)-1)
-                    j += 1
-                i += 1
-            count -= 1
-            i += 1
-            
-            #else:
-             #   continue
-        else:
-            i += 1
-    new = new.split()
-            
-    print(new, type(new))
-        
-    
-    
-=======
-    new =str(self)
-    oplist = ['+', '-', '*', '/', '**', '%', '//', '(', ')']
-    oplist2 = ['+','-','*','/','**', '%','//']
-    count=0
-    count+=new.count("(") 
-    i=0
-    j=0
-    while i<len(new):
-        if new[i]=='(':
-            if count==1:
-                j=i
-                while j<len(new):
-                    if new[j]==')':
-                        new2=new[i:j+1]
-                        new3=str()
-                        for k in new2:
-                            oplist3=[' ','(',')']
-                            if k not in oplist3:
-                                new3+=k
-                        if '+' in new3:
-                            l=0
-                            while l<len(new3):
-                                if new3[l] in oplist2:    
-                                    new4=float(new3[:l-1])+float(new3[l+1:])
-                                    new5=new[:i]+str(new4)+new[j+1:]
-                                    new=new5
-                                    if new in oplist2:
-                                        new5= ['('+str(new)+')']
-                                        new=new5
-                                    l=len(new3)    
-                                else:
-                                    l+=1
-                            i=0
-                            j=0
-                            count+=new.count("(") 
-                        elif '-' in new3:
-                            l=0
-                            while l<len(new3):
-                                if new3[l] in oplist2:    
-                                    new4=float(new3[:l-1])-float(new3[l+1:])
-                                    new5=new[:i]+str(new4)+new[j+1:]
-                                    new=new5
-                                    if new in oplist2:
-                                        new5= ['('+str(new)+')']
-                                        new=new5
-                                    l=len(new3)    
-                                else:
-                                    l+=1
-                            i=0
-                            j=0
-                            count+=new.count("(")   
-                        elif '//' in new3:
-                            l=0
-                            while l<len(new3):
-                                if new3[l] in oplist2:    
-                                    new4=float(new3[:l-1])//float(new3[l+2:])
-                                    new5=new[:i]+str(new4)+new[j+1:]
-                                    new=new5
-                                    if new in oplist2:
-                                        new5= ['('+str(new)+')']
-                                        new=new5
-                                    l=len(new3)    
-                                else:
-                                    l+=1
-                            i=0
-                            j=0
-                            count+=new.count("(") 
-                        elif '/' in new3:
-                            l=0
-                            while l<len(new3):
-                                if new3[l] in oplist2:    
-                                    new4=float(new3[:l-1])/float(new3[l+1:])
-                                    new5=new[:i]+str(new4)+new[j+1:]
-                                    new=new5
-                                    if new in oplist2:
-                                        new5= ['('+str(new)+')']
-                                        new=new5
-                                    l=len(new3)    
-                                else:
-                                    l+=1
-                            i=0
-                            j=0
-                            count+=new.count("(")    
-                        elif '**' in new3:
-                            l=0
-                            while l<len(new3):
-                                if new3[l] in oplist2:    
-                                    new4=float(new3[:l-1])**float(new3[l+2:])
-                                    new5=new[:i]+str(new4)+new[j+1:]
-                                    new=new5
-                                    if new in oplist2:
-                                        new5= ['('+str(new)+')']
-                                        new=new5
-                                    l=len(new3)    
-                                else:
-                                    l+=1
-                            i=0
-                            j=0
-                            count+=new.count("(")
-                        elif '*' in new3:
-                            l=0
-                            while l<len(new3):
-                                if new3[l] in oplist2:    
-                                    new4=float(new3[:l-1])*float(new3[l+1:])
-                                    new5=new[:i]+str(new4)+new[j+1:]
-                                    new=new5
-                                    if new in oplist2:
-                                        new5= ['('+str(new)+')']
-                                        new=new5
-                                    l=len(new3)    
-                                else:
-                                    l+=1
-                            i=0
-                            j=0
-                            count+=new.count("(")
-                        elif '%' in new3:
-                            l=0
-                            while l<len(new3):
-                                if new3[l] in oplist2:    
-                                    new4=float(new3[:l-1])%float(new3[l+1:])
-                                    new5=new[:i]+str(new4)+new[j+1:]
-                                    new=new5
-                                    if new in oplist2:
-                                        new5= ['('+str(new)+')']
-                                        new=new5
-                                    l=len(new3)    
-                                else:
-                                    l+=1
-                            i=0
-                            j=0
-                            count+=new.count("(")
-                    j+=1
-                i+=1
-            else:
-                count-=1
-                i+=1
-        else:
-            i+=1
-    new6=0
-    k=0
-    while k<len(new):
-        if new[k] not in oplist:
-            new6+=float(new[k:])
-            k=len(new)
-        else:
-            k+=1
-    new=new6        
->>>>>>> a05c331bdd926da5f45ed637917b741c21191488
-    return new
+
+
+
+
+
     
 class Constant(Expression):
     """Represents a constant value"""
@@ -375,17 +178,52 @@ class Constant(Expression):
         
     def __float__(self):
         return float(self.value)
+
+    def evaluate(self, dic=None):
+        return float(self)
+
+
+class Variable(Expression):
+    """Represents a variable"""
+    def __init__(self, variable):
+        self.variable = variable
+
+    def __eq__(self, other):
+        if isinstance(other, Variable):
+            return self.variable == other.variable
+        else:
+            return False
+        
+    def __str__(self):
+        return str(self.variable)
+        
+    def evaluate(self, dic=None):
+        return dic[self.variable]          
+
+
+'''''class Function(Expression):
+    """Represents a function"""
+    def __init__(self, function):
+        self.function = function
+
+    def __eq__(self, other):
+        if isinstance(other, Function):
+            return self.function == other.function
+        else:
+            return False
+
+    def __str__(self):
+        return str(self.function)'''''
+
         
 class BinaryNode(Expression):
-    """A node in the expression tree representing a binary operator."""
-    
+    """A node in the expression tree representing a binary operator."""    
     def __init__(self, lhs, rhs, op_symbol):
         self.lhs = lhs
         self.rhs = rhs
         self.op_symbol = op_symbol
     
-##### TODO: what other properties could you need? Precedence, associativity, identity, etc.
-            
+##### TODO: what other properties could you need? Precedence, associativity, identity, etc.            
     def __eq__(self, other):
         if type(self) == type(other):
             return self.lhs == other.lhs and self.rhs == other.rhs
@@ -398,66 +236,50 @@ class BinaryNode(Expression):
         
 ######### TODO: do we always need parantheses?
         return "(%s %s %s)" % (lstring, self.op_symbol, rstring)
+
+    def evaluate(self, dic=None):
+        lhsEval = self.lhs.evaluate(dic)
+        rhsEval = self.rhs.evaluate(dic)
+        return eval("(%s %s %s)" % (lhsEval, self.op_symbol, rhsEval)) 
+
         
 class AddNode(BinaryNode):
     """Represents the addition operator"""
     def __init__(self, lhs, rhs):
         super(AddNode, self).__init__(lhs, rhs, '+')
 
-    def evaluate(self):
-    	ans = evaluate(self)
-    	return ans
 
 class SubNode(BinaryNode):
     """Represents the substraction operator"""
     def __init__(self, lhs, rhs):
         super(SubNode, self).__init__(lhs, rhs, '-')
 
-    def evaluate(self):
-    	ans = evaluate(self)
-    	return ans
 
 class MulNode(BinaryNode):
     """Represents the multiplication operator"""
     def __init__(self, lhs, rhs):
         super(MulNode, self).__init__(lhs, rhs, '*')
 
-    def evaluate(self):
-    	ans = evaluate(self)
-    	return ans
         
 class DivNode(BinaryNode):
     """Represents the division operator"""
     def __init__(self, lhs, rhs):
         super(DivNode, self).__init__(lhs, rhs, '/')
 
-    def evaluate(self):
-    	ans = evaluate(self)
-    	return ans
 
 class PowNode(BinaryNode):
     """Represents the power operator"""
     def __init__(self, lhs, rhs):
         super(PowNode, self).__init__(lhs, rhs, '**')
 
-    def evaluate(self):
-    	ans = evaluate(self)
-    	return ans
 
 class ModNode(BinaryNode):
     """Represents the modulus operator"""
     def __init__(self, lhs, rhs):
         super(ModNode, self).__init__(lhs, rhs, '%')
 
-    def evaluate(self):
-    	ans = evaluate(self)
-    	return ans
 
 class FloorDivNode(BinaryNode):
     """Represents the floor division operator"""
     def __init__(self, lhs, rhs):
         super(FloorDivNode, self).__init__(lhs, rhs, '//')
-
-    def evaluate(self):
-    	ans = evaluate(self)
-    	return ans
