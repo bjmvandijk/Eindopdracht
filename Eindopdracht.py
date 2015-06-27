@@ -6,8 +6,7 @@ import math
 # returns a list of numbers, operators, parantheses and commas
 # output will not contain spaces
 def tokenize(string):
-    splitchars = list("+-*/(),%")
-    
+    splitchars = list("+-*/(),%=")
     # surround any splitchar by spaces
     tokenstring = []
     for c in string:
@@ -16,16 +15,17 @@ def tokenize(string):
         else:
             tokenstring.append(c)
     tokenstring = ''.join(tokenstring)
-    #split on spaces - this gives us our tokens
+    # split on spaces: this gives us our tokens
     tokens = tokenstring.split()
-    
-    #special casing for ** and //
+    # special casing for ** and //
     ans = []
     for t in tokens:
         if len(ans) > 0 and t == ans[-1] == '*':
             ans[-1] = '**'
         elif len(ans) > 0 and t == ans[-1] == '/':
             ans[-1] = '//'
+        elif len(ans) > 0 and t == ans[-1] == '=':
+            ans[-1] = '=='
         else:
             ans.append(t)
     return ans
@@ -88,6 +88,9 @@ class Expression():
     def __floordiv__(self, other):
         return FloorDivNode(self, other)
 
+    def __eq__(self, other):
+        return EqNode(self, other)
+
     # basic Shunting-yard algorithm
     def fromString(string):
         # split into tokens
@@ -100,7 +103,7 @@ class Expression():
         output = []
         
         # list of operators
-        oplist = ['+', '-', '*', '/', '**', '%', '//']
+        oplist = ['+', '-', '*', '/', '**', '%', '//']#, '==']
         
         for token in tokens:
             if isnumber(token):
@@ -109,8 +112,6 @@ class Expression():
                     output.append(Constant(int(token)))
                 else:
                     output.append(Constant(float(token)))
-            elif isvar(token) and token not in oplist:
-                output.append(Variable(str(token)))
             elif token in oplist:
                 # pop operators from the stack to the output until the top is no longer an operator
                 while True:
@@ -121,6 +122,8 @@ class Expression():
                     output.append(stack.pop())
                 # push the new operator onto the stack
                 stack.append(token)
+            elif isvar(token) and token not in oplist:
+                output.append(Variable(str(token)))
             elif token == '(':
                 # left parantheses go to the stack
                 stack.append(token)
@@ -283,3 +286,8 @@ class FloorDivNode(BinaryNode):
     """Represents the floor division operator"""
     def __init__(self, lhs, rhs):
         super(FloorDivNode, self).__init__(lhs, rhs, '//')
+
+class EqNode(BinaryNode):
+    """Represents the equality operator"""
+    def __init__(self, lhs, rhs):
+        super(EqNode, self).__init__(lhs, rhs, '==')
