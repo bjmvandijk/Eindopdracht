@@ -312,6 +312,31 @@ class BinaryNode(Expression):
         lhsEval = self.lhs.evaluate(dic)
         rhsEval = self.rhs.evaluate(dic)
         return eval("%s %s %s" % (lhsEval, self.op_symbol, rhsEval))
+        
+    def findRoot(self,x,epsilon,n1=None,n2=None):
+        "Represents a function to find zero points of an expression with 1 Variable()"
+        if (n1 or n2)==None:
+            print('To find Root, please provide an interval as a two dictionaries:\n  interval1: {Dictionary} , interval2 {Dictionary}')
+            return
+        m={x:float((n1[x]+n2[x])/2)}
+        b=float(n2[x])
+        a=float(n1[x])
+        epsilon=float(epsilon)
+        if abs(b-a)<=epsilon:
+            print("{:.2f}".format(m[x]))
+            return m
+        elif self.evaluate(n1)<0.0 and self.evaluate(m)>0.0:
+            return self.findRoot(x,epsilon,n1,m)
+        elif self.evaluate(n2)<0.0 and self.evaluate(m)>0.0: 
+            return self.findRoot(x,epsilon,m,n2)
+        elif self.evaluate(n1)>0.0 and self.evaluate(m)<0.0:
+            return self.findRoot(x,epsilon,n1,m)
+        elif self.evaluate(n2)>0.0 and self.evaluate(m)<0.0: 
+            return self.findRoot(x,epsilon,m,n2)    
+        else:
+            n1[x]+=epsilon
+            n2[x]-=epsilon
+            return self.findRoot(x,epsilon,n1,n2)    
 
 class AddNode(BinaryNode):
     """Represents the addition operator"""

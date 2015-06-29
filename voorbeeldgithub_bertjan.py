@@ -186,6 +186,11 @@ class BinaryNode(Expression):
         
         # TODO: do we always need parantheses?
         return "(%s %s %s)" % (lstring, self.op_symbol, rstring)
+    
+    def evaluate(self):
+        lhsEval = self.lhs.evaluate()
+        rhsEval = self.rhs.evaluate()
+        return eval("%s %s %s" % (lhsEval, self.op_symbol, rhsEval))
         
 class AddNode(BinaryNode):
     """Represents the addition operator"""

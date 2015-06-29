@@ -1,37 +1,44 @@
-from Voorbeeldgitub import *
+from V3gitub import *
 a = Constant(2.0)
 b = Constant(3.0)
 d=Constant(10)
 c = ( ( a + b ) + d ) + (( a + d )+ b)
-e= (( a*d)/(b))
-f=( a+ (b**d))
-print(type(c),type(a-b))
+e = (( a*d)/(b))
+g = (( d*a)/(b))
+f = ( a+ (b**d))
+#print(type(c),type(a-b))
 print(c)
+#print(c==e)
+#print(type(e),type(g))
+#print(e==g, g==e)
+e.opeq(g)
+c.opeq(f)
 expr = Expression.fromString('1+2+3/4')
-
+expt = Expression.fromString('1+2**3+3+4**2')
 print(expr)
-
+print(expt)
+#print(c.minimal())
 
 print(c.evaluate())
 print(e.evaluate())
 print(f.evaluate())
-print(c.minimum())
+#print(c.minimum())
 
 a = Constant(2)
 b = Constant(3)
 
 x = Variable('x')
-c = a*x + b
+c = a+x + b
 print(c)
-print(c.minimum())
+#print(c.minimum())
 expr = Expression.fromString('x+y**2')
-expr2= Expression.fromString( '1*x-5/10')
+expr2= Expression.fromString( 'x+5')
 print(expr)
 print(expr2)
+expr.opeq(expr2, {'x':4, 'y':5}) #,{'x':10}
 print(type(expr), 'type expr')
 
-
-expr2= Expression.fromString( '1*x-5/10')
+expr2.findRoot('x',0.005,{'x':-1000},{ 'x':1000})
 print(expr2, 'expr2')
 print(c.evaluate({'x':2}))
 

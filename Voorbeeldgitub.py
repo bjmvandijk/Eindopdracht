@@ -88,44 +88,7 @@ class Expression():
     def __floordiv__(self, other):
         return FloorDivNode(self, other)
 
-    '''def minimize(self,var=None):
-        carlist = ['(', ')']
-        operation_map = {
-        '+': (1, False),
-        '-': (1, True),
-        '*': (2, False),
-        '/': (2, True)}
-        
-        def infix(upper_prio = 0, rhs_of_lassoc = False):
-            
-            
-            
-            for i in stringself:
-                symbol = stringself.pop()
-                print(symbol, 'symbol', stringself)
-                if symbol in operation_map:
-                    prio, lassoc = operation_map[symbol]
-                    print(prio, 'prio')
-                    rhand = infix(prio, lassoc)
-                    lhand = infix(prio)
-                    string = "%s %s %s" % (lhand, symbol, rhand)
-                    if prio < upper_prio or (prio == upper_prio and rhs_of_lassoc):
-                        string = "(" + string + ")"
-                        return string
-            return symbol
-        newstringself=str()
-        stringself=str(self)
-        print(stringself)
-        for i in stringself:
-            if i not in carlist:
-                newstringself+=i
-        print (newstringself, 'nstrself')
-        stringself=newstringself
-        stringself=list(stringself)
-        print(stringself,'list')
-        stringself= infix() 
-        return stringself
-        ''' 
+    
     # basic Shunting-yard algorithm
     def fromString(string):
         # split into tokens
@@ -203,141 +166,6 @@ class Expression():
         
         return stack[0]
 
-        
-
-def minimum(self):
-    oplist = ['+', '-', '*', '/', '**', '%', '//']
-    oplist2 = ['+','-']
-    oplist3 = ['*','/']
-    oplist4 = ['**']
-    oplist5 = ['%', '//']
-    #oplist6 = ['//']
-    new = (str(self))
-    i = 0
-    j = 0
-    while i < len(new):
-        if new[i] in oplist:
-            # define the importance of + and -
-            if new[i] in oplist2:
-                j = i + 1
-                while j < len(new):
-                    if new[j] in oplist:
-                        if new[j] in oplist2:
-                            new1 = new[i:j]
-                            new2 = str()
-                            for k in new1:
-                                if k is not ')':
-                                    new2 += k
-                            new3 = str()
-                            new3 = new[0:i] + new2 + new[j:len(new)]
-                            l = i
-                            while l >= 0:
-                                if new3[l] == '(':
-                                    new4 = str()
-                                    new4 = new3[:l] + new3[l+1:]
-                                    new = new4
-                                    i = 0
-                                    j = 0
-                                    l =- 1
-                                else:
-                                    l -= 1
-                            j = len(new)    
-                        else:
-                            j = len(new)
-                    else:
-                        j += 1
-            # define the importance of * and /
-            elif new[i] in oplist3:
-                j = i + 1
-                while j < len(new):
-                    if new[j] in oplist:
-                        if new[j] in oplist3 or new[j] in oplist2:  #????????????????
-                            new1 = new[i:j]
-                            new2 = str()
-                            for k in new1:
-                                if k is not ')':
-                                    new2 += k
-                            new3 = str()
-                            new3 = new[0:i] + new2 + new[j:len(new)]
-                            l = i
-                            while l >= 0:
-                                if new3[l] == '(':
-                                    new4 = str()
-                                    new4 = new3[:l] + new3[l+1:]
-                                    new = new4
-                                    i = 0
-                                    j = 0
-                                    l =- 1
-                                else:
-                                    l -= 1
-                            j = len(new)    
-                        else:
-                            j = len(new)
-                    else:
-                        j += 1
-            # define the importance of ** 
-            elif new[i] in oplist4:
-                j = i + 1
-                while j < len(new):
-                    if new[j] in oplist:
-                        if new[j] in oplist4:
-                            new1 = new[i:j]
-                            new2 = str()
-                            for k in new1:
-                                if k is not ')':
-                                    new2 += k
-                            new3 = str()
-                            new3 = new[0:i] + new2 + new[j:len(new)]
-                            l = i
-                            while l >= 0:
-                                if new3[l] == '(':
-                                    new4 = str()
-                                    new4 = new3[:l] + new3[l+1:]
-                                    new = new4
-                                    i = 0
-                                    j = 0
-                                    l =- 1
-                                else:
-                                    l -= 1
-                            j = len(new)    
-                        else:
-                            j = len(new)
-                    else:
-                        j += 1   
-            # define the importance of % and //
-            elif new[i] in oplist5:
-                j = i + 1
-                while j < len(new):
-                    if new[j] in oplist:
-                        if new[j] in oplist5:
-                            new1 = new[i:j]
-                            new2 = str()
-                            for k in new1:
-                                if k is not ')':
-                                    new2 += k
-                            new3 = str()
-                            new3 = new[0:i] + new2 + new3[l+1:]
-                            l = i
-                            while l >= 0:
-                                if new3[l] == '(':
-                                    new4 = str()
-                                    new4 = new3[:l] + new3[l+1:]
-                                    new = new4
-                                    i = 0
-                                    j = 0
-                                    l += 1
-                                else:
-                                    l -= 1
-                            j = len(new)    
-                        else:
-                            j = len(new)
-                    else:
-                        j += 1  
-            i = len(new)
-        else:
-           i += 1
-    return new
-    
 class Constant(Expression):
     """Represents a constant value"""
     def __init__(self, value):
@@ -411,14 +239,73 @@ class BinaryNode(Expression):
     # TODO: what other properties could you need? Precedence, associativity, identity, etc.
             
     def __eq__(self, other):
+        
         if type(self) == type(other):
-            return self.lhs == other.lhs and self.rhs == other.rhs
-        else:
-            return False
             
+            if self.lhs == other.lhs and self.rhs == other.rhs:
+                
+                return True
+        else:
+            
+            return False
+    def opeq(self,other,dic1=None, dic2=None):
+        "An function to compare the similarity of operants in self and other expression"
+        print('Equalty check started:')
+        oplist = ['+', '-', '*', '/', '**', '%', '//']
+        charlist = ['(',')',' ','.']
+        strself=str(self) #Creating a string from self, without changing self
+        strother=str(other) #Creating a string from other, wothout changing other
+        selfop=str() #Initiating an operant string from self
+        otherop=str() #Initiating an operant string from other
+        selfc=str() #Initiating a Constant string from self
+        otherc=str() #Initiating a Constant string from other
+        selfv=str() #Initiating a Variable string from self
+        otherv=str() #Intiating a Variable string from other
+        for i in strself:
+            "Adding of the strings from self"
+            if i in oplist:
+                selfop+=i
+            else:
+                if isint(i)==False or isnumber(i)==False:
+                    if i not in charlist:
+                        selfv+=i
+                else:
+                    selfc+=i
+        for i in strother:
+            "Adding of the strings from other"
+            if i in oplist:
+                otherop+=i
+            else:
+                if isint(i)==False or isnumber(i)==False:
+                    if i not in charlist:
+                        otherv+=i
+                else:
+                    otherc+=i
+        if (len(selfv) or len(otherv))>0:
+            "Checking if there is an Variable() in self or other and if a dictionary is given"
+            if (isvar(self)==True and dic1==None) or (isvar(other)==True and dic2==None):
+                print('Found Type Variable() but missing dictionary')
+                print('For comparing evaluate, please provide a dictionary for Expression in the following order:\nself, other, dictonary self, dictionary other')
+                return
+            else:
+                "Evaluation of self and other and comparing the result (with or without dictionaries"
+                evaluated=(BinaryNode.evaluate(self,dic1)==BinaryNode.evaluate(other,dic2))
+                if evaluated==True:
+                    print('Evaluated Expressions are equal:',BinaryNode.evaluate(self,dic1))
+                else:
+                    print('Evaluated Expressions are not equal:', BinaryNode.evaluate(self,dic1),'and', BinaryNode.evaluate(other,dic2))
+        if (selfop==otherop)==True:
+            print('Operations are equal and in the same order')
+        else:
+            print('Operations are not equal')
+        if (selfc==otherc)==True:
+            print('Constants are equal and in the same order')
+        else:
+            print('Constants are not equal')
+        return         
+ 
     def __str__(self):
         def stringinstr(self):
-            
             lstring = str(self.lhs)
             rstring = str(self.rhs)
             # TODO: do we always need parantheses?
@@ -428,18 +315,15 @@ class BinaryNode(Expression):
             oplist4 = ['**']
             oplist5 = ['%', '//']
             if self.op_symbol in oplist4:
-                print('**', lstring[:len(lstring)-1],lstring[len(lstring)-1])
-                stringself= "%s %s %s %s" % (lstring[:len(lstring)-2],lstring[len(lstring)-1], self.op_symbol, rstring)
+                    stringself= "%s %s %s %s" % (lstring[:len(lstring)-2],lstring[len(lstring)-1], self.op_symbol, rstring)
+                    return stringself
             for i in lstring:
                 if i in oplist2:
-                    
                     if self.op_symbol not in oplist2:
-                        
                         stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
                         return stringself
                 if i in oplist3:
                     if self.op_symbol not in (oplist3 and oplist2):
-                        
                         stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
                         return stringself
                 if i in oplist5:
@@ -453,18 +337,13 @@ class BinaryNode(Expression):
             stringself= "%s %s %s" % (lstring, self.op_symbol, rstring)
             return stringself
         new=stringinstr(self)
-        
-        
         return new     
         
     def evaluate(self, dic=None):
         lhsEval = self.lhs.evaluate(dic)
         rhsEval = self.rhs.evaluate(dic)
         return eval("%s %s %s" % (lhsEval, self.op_symbol, rhsEval))
-    
-    def minumum(self):
-        return self 
-        
+
 class AddNode(BinaryNode):
     """Represents the addition operator"""
     def __init__(self, lhs, rhs):
