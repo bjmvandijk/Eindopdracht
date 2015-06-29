@@ -77,7 +77,7 @@ class Expression():
         return MulNode(self, other)
 
     def __truediv__(self, other):
-        return DivNode(self, other)
+        return TrueDivNode(self, other)
         
     def __pow__(self, other):
         return PowNode(self, other)
@@ -264,10 +264,10 @@ class MulNode(BinaryNode):
         super(MulNode, self).__init__(lhs, rhs, '*')
 
         
-class DivNode(BinaryNode):
+class TrueDivNode(BinaryNode):
     """Represents the division operator"""
     def __init__(self, lhs, rhs):
-        super(DivNode, self).__init__(lhs, rhs, '/')
+        super(TrueDivNode, self).__init__(lhs, rhs, '/')
 
 
 class PowNode(BinaryNode):
