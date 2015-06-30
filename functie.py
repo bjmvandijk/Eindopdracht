@@ -18,6 +18,9 @@ print(f)
              
 expr = Expression.fromString('10*0.5-3+20')
 expr2 = Expression.fromString('4*5+2')
+
+expr3 = Expression.fromString('1+3')
+expr4 = Expression.fromString('2+2')
 #print(expr.evaluate({'x':5}))
 
 #print(c.evaluate())
@@ -25,8 +28,12 @@ print(expr.evaluate())
 print(expr2.evaluate())
 
 g = expr.evaluate() == expr2.evaluate()
+h = expr == expr2
+i = expr3 == expr3
 
 print(g)
+print(h)
+print(i)
 
 #expr2= Expression.fromString('1*x-5/10+8-5*30//10')
 #print(expr2)
