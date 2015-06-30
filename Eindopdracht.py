@@ -249,7 +249,7 @@ class BinaryNode(Expression):
         rhsEval = self.rhs.evaluate(dic)
         return eval("(%s %s %s)" % (lhsEval, self.op_symbol, rhsEval)) 
 
-    def findAllRoots(f, a, b, epsilon):
+    def findAllRoots(self, a, b, epsilon):
         zero = []
         while abs(b - a) > epsilon:
             if f(a) * f(a + epsilon) > 0:
