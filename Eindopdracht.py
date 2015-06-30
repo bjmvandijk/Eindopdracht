@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 
 """
-Code to perform .......
+Code which saves mathematical formulas as an expression tree, this is done by 
+converting the Reverse Polish Notation provided by the Shunting-Yard algorithm.
+
+This representation can be used to perform several calculations and symbolic manipulation.
+
+Bertjan van Dijk & Omar El-Haloush @ Utrecht, 2015
 """
 
 
@@ -60,6 +65,23 @@ def isvar(string):
     except ValueError:
         return False
 
+# check
+def precedence(token):
+    if token == '+' or token == '-':
+        return(1)
+    elif token == '*' or token == '/': 
+        return(2)
+    elif token == '%' or token == '//':
+        return(3)
+    elif token == '**':
+        return(4)
+    else:
+        return(0)
+
+def associativity(token):
+
+def identity(token):
+
 class Expression():
     """A mathematical expression, represented as an expression tree"""
     
@@ -93,7 +115,9 @@ class Expression():
         return FloorDivNode(self, other)
 
     def __eq__(self, other):
-        return EqNode(self, other)
+        #return EqNode(self, other)
+        if type(self) != type(other):
+            return False
 
     # basic Shunting-yard algorithm
     def fromString(string):
@@ -232,10 +256,12 @@ class BinaryNode(Expression):
     
 ##### TODO: what other properties could you need? Precedence, associativity, identity, etc.            
     def __eq__(self, other):
-        if type(self) == type(other):
-            return self.lhs == other.lhs and self.rhs == other.rhs
-        else:
+        if type(self) != type(other):
             return False
+        elif self.op_symbol != other.op_symbol:
+            return False
+        else:
+            return self.lhs == other.lhs and self.rhs == other.rhs
             
     def __str__(self):
         lstring = str(self.lhs)
