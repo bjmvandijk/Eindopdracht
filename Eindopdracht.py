@@ -1,4 +1,9 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
+
+"""
+Code to perform .......
+"""
+
 
 import math
 
@@ -63,7 +68,6 @@ class Expression():
      - __str__(): return a string representation of the Expression.
      - __eq__(other): tree-equality, check if other represents the same expression tree.
     """
-##### TODO: when adding new methods that should be supported by all subclasses, add them to this list
     
     # operator overloading:
     # this allows us to perform 'arithmetic' with expressions, and obtain another expression
@@ -244,6 +248,16 @@ class BinaryNode(Expression):
         lhsEval = self.lhs.evaluate(dic)
         rhsEval = self.rhs.evaluate(dic)
         return eval("(%s %s %s)" % (lhsEval, self.op_symbol, rhsEval)) 
+
+    def findAllRoots(f, a, b, epsilon):
+        zero = []
+        while abs(b - a) > epsilon:
+            if f(a) * f(a + epsilon) > 0:
+                a += epsilon
+            else:
+                zero.append(findRoot(f, a, (a + epsilon), epsilon))
+                a += epsilon
+        return zero
 
         
 class AddNode(BinaryNode):
