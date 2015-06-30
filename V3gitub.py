@@ -173,6 +173,7 @@ class Constant(Expression):
         
     def evaluate(self,dic):
         return float(self)
+        
 class Variable(Expression):
     """Represents a variable"""
     def __init__(self, variable):
@@ -188,7 +189,7 @@ class Variable(Expression):
         return str(self.variable)
         
     def evaluate(self,dic):
-        return dic[self.variable]
+        return float(dic[self.variable])
     
 
 class Function(Expression):
@@ -316,69 +317,57 @@ class BinaryNode(Expression):
         rhsEval = self.rhs.evaluate(dic)
         return eval("%s %s %s" % (lhsEval, self.op_symbol, rhsEval))
         
-    '''def findRoot(self,x,epsilon,low=-1000,up=1000):
+    '''def findRoot(self,x,epsilon,a=-1000,b=1000):
         "Represents a function to find zero points of an expression with 1 Variable()"
-        if (low and up)>0:
-            #print('To find Root, please provide an interval as a two dictionaries:\n  interval1: {Dictionary} , interval2 {Dictionary}')
-            n1={x:low}
-            n2={x:up}
-            c=(low+up)/2
-        m={x:c}
-        b=float(n2[x])
-        a=float(n1[x])
-        epsilon=float(epsilon)
-        if abs(b-a)<=epsilon:
-            print("{:.2f}".format(m[x]))
-            return c
-        elif self.evaluate(n1)<0.0 and self.evaluate(m)>0.0:
-            return self.findRoot(x,epsilon,n1[x],m[x])
-        elif self.evaluate(n2)<0.0 and self.evaluate(m)>0.0: 
-            return self.findRoot(x,epsilon,m,n2)
-        elif self.evaluate(n1)>0.0 and self.evaluate(m)<0.0:
-            return self.findRoot(x,epsilon,n1,m)
-        elif self.evaluate(n2)>0.0 and self.evaluate(m)<0.0: 
-            return self.findRoot(x,epsilon,m,n2)    
-        else:
-            n1[x]+=epsilon
-            n2[x]-=epsilon
-            return self.findRoot(x,epsilon,n1,n2)'''
+        self=str(self)
+        m=(a+b)/2
+        while (b-a) > epsilon:
+            if eval(self,{x:m})==0:
+                return m
+            elif (eval(self,{x:a})*eval(self, {x:m})) < abs(epsilon):
+                b=m
+            elif (eval(self,{x:b})*eval(self, {x:m})) < abs(epsilon):
+                a=m
+            else:
+                b=m
+            m=(a+b)/2
+        return ("{:.4f}".format(m))
     
-    def findRoot(self,x,epsilon,low=-1000,up=1000):
-        "Represents a function to find zero points of an expression with 1 Variable()"
-        n1={x:low}
-        n2={x:up}
-        c=(low+up)/2
-        m={x:c} 
-        epsilon=float(epsilon)    
-        while abs(up-low) > (epsilon):
-            if self.evaluate(m) == 0:
-                return c
-            elif self.evaluate(n2)*self.evaluate(m) < 0:
-                low = c
-            else:
-                up = c
-            c = (low+up)/2
-            m = {x:c}
-        return ("{:.4f}".format(c))
-
-    def findAllRoots(self,x,epsilon,low=-1000,up=1000):
+    def findAllRoots(self,x,epsilon,a=-1000,b=1000):
         zero = []
-        n1={x:low}
-        n2={x:up}
-        
-        
-        
-        while abs(up - low) > abs(epsilon):
-            if (self.evaluate(n1) * self.evaluate({x:(low + epsilon)})) > epsilon:
-                low += epsilon
-                n1={x:low}
-                #print(low,epsilon, self.evaluate(n1), self.evaluate({x:(low + epsilon)}))
+        self=str(self)
+        while abs(b - a) > epsilon:
+            if (eval(self,{x:a})*eval(self,{x:a+epsilon}))>0:
+                a+=epsilon
             else:
-                zero.append(self.findRoot(x,epsilon, low,(low + epsilon)))
-                #print(zero[len(zero)-1], len(zero), epsilon,self.evaluate(n1), self.evaluate({x:(low + epsilon)}))
-                low += epsilon
-                n1={x:low}
-        return zero        
+                zero.append(BinaryNode.findRoot(self,x,epsilon, a, (a+epsilon)))
+                a+=epsilon
+        return zero'''
+    def findRoot(self, x,epsilon, a=-1000, b=1000):
+        m=(a+b)/2
+        while (b-a) > epsilon:
+            print(epsilon, a, b, 'root')
+            if self.evaluate({x:m})==0:
+                return m
+            elif (self.evaluate({x:a})*self.evaluate({x:m})) < abs(epsilon):
+                b=m
+            elif (self.evaluate({x:b})*self.evaluate({x:m})) < abs(epsilon):
+                a=m
+            else:
+                b=m
+            m=(a+b)/2
+        return ("{:.4f}".format(m))
+    
+    def findAllRoots(self,x,epsilon,a=-1000,b=1000):
+        zero = []
+        while abs(b - a) > epsilon:
+            print(b,a,epsilon)
+            if (self.evaluate({x:a})*self.evaluate({x:a+epsilon}))>0:
+                a+=epsilon
+            else:
+                zero.append(self.findRoot(x,epsilon, a, (a+epsilon)))
+                a+=epsilon
+        return zero  
     
 class AddNode(BinaryNode):
     """Represents the addition operator"""
