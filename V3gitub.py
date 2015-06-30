@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import math
-
+from scipy import diff
 # split a string into mathematical tokens
 # returns a list of numbers, operators, parantheses and commas
 # output will not contain spaces
@@ -49,10 +49,13 @@ def isint(string):
 
 #check if a string represents an Variable
 def isvar(string):
-    try:
-        str(string)
-        return True
-    except ValueError:
+    if string !='(' and string != ')':
+        try:
+            str(string)
+            return True
+        except ValueError:
+            return False
+    else:
         return False
 
 class Expression():
@@ -217,8 +220,9 @@ class BinaryNode(Expression):
                 return True
         else:
             return False
+            
     def opeq(self,other,dic1=None, dic2=None):
-        "An function to compare the similarity of operants in self and other expression"
+        "A function to compare the similarity of operants/constants/variables in self and other expression"
         print('Equalty check started:')
         oplist = ['+', '-', '*', '/', '**', '%', '//']
         charlist = ['(',')',' ','.']
@@ -257,12 +261,13 @@ class BinaryNode(Expression):
                 print(' For comparing evaluate, please provide a dictionary for Expression in the following order:\n        self, other, dictonary self, dictionary other')
                 return
             else:
-                "Evaluation of self and other and comparing the result (with or without dictionaries"
+                "Evaluation of self and other and comparing the result (with or without dictionaries)"
                 evaluated=(BinaryNode.evaluate(self,dic1)==BinaryNode.evaluate(other,dic2))
                 if evaluated==True:
                     print(' Evaluated Expressions are equal:',BinaryNode.evaluate(self,dic1))
                 else:
                     print(' Evaluated Expressions are not equal:', BinaryNode.evaluate(self,dic1),'and', BinaryNode.evaluate(other,dic2))
+        print(selfop)
         if (selfop==otherop)==True:
             print(' Operations are equal and in the same order')
         else:
@@ -271,62 +276,62 @@ class BinaryNode(Expression):
             print(' Constants are equal and in the same order')
         else:
             print(' Constants are not equal')
-        return         
- 
+        return        
+    
     def __str__(self):
-        def stringinstr(self):
-            lstring = str(self.lhs)
-            rstring = str(self.rhs)
-            # TODO: do we always need parantheses?
-            oplist = ['+', '-', '*', '/', '**', '%', '//']
-            oplist2 = ['+','-']
-            oplist3 = ['*','/']
-            oplist4 = ['**']
-            oplist5 = ['%', '//']
-            if self.op_symbol in oplist4:
-                    stringself= "%s %s %s %s" % (lstring[:len(lstring)-2],lstring[len(lstring)-1], self.op_symbol, rstring)
-                    return stringself
-            for i in lstring:
-                if i in oplist2:
-                    if self.op_symbol not in oplist2:
-                        stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
-                        return stringself
-                if i in oplist3:
-                    if self.op_symbol not in (oplist3 and oplist2):
-                        stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
-                        return stringself
-                if i in oplist5:
-                    if self.op_symbol not in (oplist5 and oplist3 and oplist2):
-                        stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
-                        return stringself
-                if i in oplist4:
-                    if self.op_symbol not in oplist4:
-                        stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
-                        return stringself        
-            stringself= "%s %s %s" % (lstring, self.op_symbol, rstring)
-            return stringself
-        new=stringinstr(self)
-        return new     
         
+        lstring = str(self.lhs)
+        rstring = str(self.rhs)
+        # TODO: do we always need parantheses?
+        oplist = ['+', '-', '*', '/', '**', '%', '//']
+        oplist2 = ['+','-']
+        oplist3 = ['*','/']
+        oplist4 = ['**']
+        oplist5 = ['%', '//']
+        if self.op_symbol in oplist4:
+                stringself= "%s %s %s %s" % (lstring[:len(lstring)-2],lstring[len(lstring)-1], self.op_symbol, rstring)
+                return stringself
+        for i in lstring:
+            if i in oplist2:
+                if self.op_symbol not in oplist2:
+                    stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
+                    return stringself
+            if i in oplist3:
+                if self.op_symbol not in (oplist3 or oplist2):
+                    stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
+                    return stringself
+            if i in oplist5:
+                if self.op_symbol not in (oplist5 or oplist3 or oplist2):
+                    stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
+                    return stringself
+            if i in oplist4:
+                if self.op_symbol not in oplist4:
+                    stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
+                    return stringself        
+        stringself= "%s %s %s" % (lstring, self.op_symbol, rstring)
+        return stringself
+
     def evaluate(self, dic=None):
         lhsEval = self.lhs.evaluate(dic)
         rhsEval = self.rhs.evaluate(dic)
         return eval("%s %s %s" % (lhsEval, self.op_symbol, rhsEval))
         
-    def findRoot(self,x,epsilon,n1=None,n2=None):
+    '''def findRoot(self,x,epsilon,low=-1000,up=1000):
         "Represents a function to find zero points of an expression with 1 Variable()"
-        if (n1 or n2)==None:
-            print('To find Root, please provide an interval as a two dictionaries:\n  interval1: {Dictionary} , interval2 {Dictionary}')
-            return
-        m={x:float((n1[x]+n2[x])/2)}
+        if (low and up)>0:
+            #print('To find Root, please provide an interval as a two dictionaries:\n  interval1: {Dictionary} , interval2 {Dictionary}')
+            n1={x:low}
+            n2={x:up}
+            c=(low+up)/2
+        m={x:c}
         b=float(n2[x])
         a=float(n1[x])
         epsilon=float(epsilon)
         if abs(b-a)<=epsilon:
             print("{:.2f}".format(m[x]))
-            return m
+            return c
         elif self.evaluate(n1)<0.0 and self.evaluate(m)>0.0:
-            return self.findRoot(x,epsilon,n1,m)
+            return self.findRoot(x,epsilon,n1[x],m[x])
         elif self.evaluate(n2)<0.0 and self.evaluate(m)>0.0: 
             return self.findRoot(x,epsilon,m,n2)
         elif self.evaluate(n1)>0.0 and self.evaluate(m)<0.0:
@@ -336,8 +341,45 @@ class BinaryNode(Expression):
         else:
             n1[x]+=epsilon
             n2[x]-=epsilon
-            return self.findRoot(x,epsilon,n1,n2)    
+            return self.findRoot(x,epsilon,n1,n2)'''
+    
+    def findRoot(self,x,epsilon,low=-1000,up=1000):
+        "Represents a function to find zero points of an expression with 1 Variable()"
+        n1={x:low}
+        n2={x:up}
+        c=(low+up)/2
+        m={x:c} 
+        epsilon=float(epsilon)    
+        while abs(up-low) > (epsilon):
+            if self.evaluate(m) == 0:
+                return c
+            elif self.evaluate(n2)*self.evaluate(m) < 0:
+                low = c
+            else:
+                up = c
+            c = (low+up)/2
+            m = {x:c}
+        return ("{:.4f}".format(c))
 
+    def findAllRoots(self,x,epsilon,low=-1000,up=1000):
+        zero = []
+        n1={x:low}
+        n2={x:up}
+        
+        
+        
+        while abs(up - low) > abs(epsilon):
+            if (self.evaluate(n1) * self.evaluate({x:(low + epsilon)})) > epsilon:
+                low += epsilon
+                n1={x:low}
+                #print(low,epsilon, self.evaluate(n1), self.evaluate({x:(low + epsilon)}))
+            else:
+                zero.append(self.findRoot(x,epsilon, low,(low + epsilon)))
+                #print(zero[len(zero)-1], len(zero), epsilon,self.evaluate(n1), self.evaluate({x:(low + epsilon)}))
+                low += epsilon
+                n1={x:low}
+        return zero        
+    
 class AddNode(BinaryNode):
     """Represents the addition operator"""
     def __init__(self, lhs, rhs):
