@@ -65,31 +65,26 @@ def isvar(string):
     except ValueError:
         return False
 
-# check
-def precedence(token):
+# check precedence
+def prec(token):
     if token == '**':
-        return(3)
+        return(1)
     elif token == '*' or token == '/' or token == '%' or token == '//':
         return(2)
     elif token == '+' or token == '-':
-        return(1)
-    else:
-        return(0)
-
-def associativity(token):
-    if token == '*':
-        return(4)
-    if token == '/':
         return(3)
-    if token == '%' or token == '+':
-        return(2)
-    if token == '//' or token == '-':
-        return(1)
-    else:
-        return(0)
 
-def identity(token):
-    
+# check associativity
+def assoc(token):
+    if token == '*':
+        return(1)
+    if token == '/':
+        return(2)
+    if token == '%' or token == '+':
+        return(3)
+    if token == '//' or token == '-':
+        return(4)
+
 class Expression():
     """A mathematical expression, represented as an expression tree"""
     
@@ -153,7 +148,8 @@ class Expression():
                 while True:
 ##################### TODO: when there are more operators, the rules are more complicated
                     # look up the shunting yard-algorithm
-                    if len(stack) == 0 or stack[-1] not in oplist:
+
+                    if len(stack) == 0 or stack[-1] not in oplist or int(prec(token)) <= int(prec(stack[-1])):
                         break
                     output.append(stack.pop())
                 # push the new operator onto the stack
@@ -240,20 +236,6 @@ class Variable(Expression):
         return dic[self.variable]          
 
 
-'''''class Function(Expression):
-    """Represents a function"""
-    def __init__(self, function):
-        self.function = function
-
-    def __eq__(self, other):
-        if isinstance(other, Function):
-            return self.function == other.function
-        else:
-            return False
-
-    def __str__(self):
-        return str(self.function)'''''
-
         
 class BinaryNode(Expression):
     """A node in the expression tree representing a binary operator."""    
@@ -262,7 +244,6 @@ class BinaryNode(Expression):
         self.rhs = rhs
         self.op_symbol = op_symbol
     
-##### TODO: what other properties could you need? Precedence, associativity, identity, etc.            
     def __eq__(self, other):
         if type(self) != type(other):
             return False
@@ -276,7 +257,50 @@ class BinaryNode(Expression):
         rstring = str(self.rhs)
         
 ######### TODO: do we always need parantheses?
-        return "(%s %s %s)" % (lstring, self.op_symbol, rstring)
+        oplist = ['+', '-', '*', '/', '**', '%', '//']
+        if self.op_symbol in oplist:
+            stringself= "%s %s %s %s" % (lstring[:len(lstring)-2],lstring[len(lstring)-1], self.op_symbol, rstring)
+        #        print(stringself)
+            return stringself
+        for 
+            if i in oplist5:
+        #        if self.op_symbol not in (oplist5 or oplist3 or oplist2):
+        #            stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
+        #            print(stringself)
+        #            return stringself
+        #oplist2 = ['+','-']
+        #oplist3 = ['*','/']
+        #oplist4 = ['**']
+        #oplist5 = ['%', '//']
+        #if self.op_symbol in oplist4:
+        #        stringself= "%s %s %s %s" % (lstring[:len(lstring)-2],lstring[len(lstring)-1], self.op_symbol, rstring)
+        #        print(stringself)
+        #        return stringself
+        #for i in lstring:
+        #    if i in oplist2:
+        #        if self.op_symbol not in oplist2:
+        #            stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
+        #            print(stringself)
+        #            return stringself
+        #    if i in oplist3:
+        #        if self.op_symbol not in (oplist3 or oplist2):
+        #            stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
+        #            print(stringself)
+        #            return stringself
+        #    if i in oplist5:
+        #        if self.op_symbol not in (oplist5 or oplist3 or oplist2):
+        #            stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
+        #            print(stringself)
+        #            return stringself
+        #    if i in oplist4:
+        #        if self.op_symbol not in oplist4:
+        #            stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
+        #            print(stringself)
+        #            return stringself        
+        #stringself= "%s %s %s" % (lstring, self.op_symbol, rstring)
+        #print(stringself)
+        #return stringself
+#        return "(%s %s %s)" % (lstring, self.op_symbol, rstring)
 
     def evaluate(self, dic=None):
         lhsEval = self.lhs.evaluate(dic)
