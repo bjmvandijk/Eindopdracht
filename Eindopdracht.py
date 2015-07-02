@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/0python3
 
 """
 Code which saves mathematical formulas as an expression tree, this is done by 
@@ -34,8 +34,8 @@ def tokenize(string):
             ans[-1] = '**'
         elif len(ans) > 0 and t == ans[-1] == '/':
             ans[-1] = '//'
-        elif len(ans) > 0 and t == ans[-1] == '=':
-            ans[-1] = '=='
+        #elif len(ans) > 0 and t == ans[-1] == '=':
+        #    ans[-1] = '=='
         else:
             ans.append(t)
     return ans
@@ -67,21 +67,29 @@ def isvar(string):
 
 # check
 def precedence(token):
-    if token == '+' or token == '-':
-        return(1)
-    elif token == '*' or token == '/': 
-        return(2)
-    elif token == '%' or token == '//':
+    if token == '**':
         return(3)
-    elif token == '**':
-        return(4)
+    elif token == '*' or token == '/' or token == '%' or token == '//':
+        return(2)
+    elif token == '+' or token == '-':
+        return(1)
     else:
         return(0)
 
 def associativity(token):
+    if token == '*':
+        return(4)
+    if token == '/':
+        return(3)
+    if token == '%' or token == '+':
+        return(2)
+    if token == '//' or token == '-':
+        return(1)
+    else:
+        return(0)
 
 def identity(token):
-
+    
 class Expression():
     """A mathematical expression, represented as an expression tree"""
     
@@ -275,15 +283,36 @@ class BinaryNode(Expression):
         rhsEval = self.rhs.evaluate(dic)
         return eval("(%s %s %s)" % (lhsEval, self.op_symbol, rhsEval)) 
 
-    def findAllRoots(self, a, b, epsilon):
-        zero = []
-        while abs(b - a) > epsilon:
-            if f(a) * f(a + epsilon) > 0:
-                a += epsilon
+    def findRoot(self, x, low, up, epsilon):
+        """Represents a function to find the zero values of a function with one variable???????"""
+        a = {x: low}
+        b = {x: up}
+        mp = (low + up) / 2
+        m = {x: mp} 
+        while abs(up - low) > (epsilon):
+            if self.evaluate(m) == 0:
+                return mp
+            elif self.evaluate(b) * self.evaluate(m) < 0:
+                low = mp
             else:
-                zero.append(findRoot(f, a, (a + epsilon), epsilon))
-                a += epsilon
-        return zero
+                up = mp
+            mp = (low + up) / 2
+            m = {x: mp}
+        return ("{:.3f}".format(c))
+
+    def findAllRoots(self, x, low, up, epsilon):
+        zero = []
+        a = {x: low}
+        b = {x: up}
+        while abs(up - low) > epsilon:
+            if self.evaluate(a) * self.evaluate({x: low + epsilon}) > 0:
+                low += epsilon
+                a = {x: low}
+            else:
+                zero.append(self.findRoot(x, low, low + epsilon, epsilon))
+                low += epsilon
+                a = {x: low}
+        return zero   
 
         
 class AddNode(BinaryNode):
