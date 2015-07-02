@@ -313,7 +313,7 @@ class BinaryNode(Expression):
         rhsEval = self.rhs.evaluate(dic)
         return eval("(%s %s %s)" % (lhsEval, self.op_symbol, rhsEval)) 
 
-    def findRoot(self, x, a=-1000, b=1000, epsilon):
+    def findRoot(self, x, a=-1000, b=1000, epsilon=0.01):
         """Represents a function to find the zero values of a function with one variable???????"""
         self.x = x
         m = (a + b) / 2
@@ -327,10 +327,9 @@ class BinaryNode(Expression):
             m = (a + b) / 2
         return ("{:.3f}".format(c))
 
-    def findAllRoots(self, x, low, up, epsilon):
+    def findAllRoots(self, x, a=-1000, b=1000, epsilon=0.01):
+        self.x = x
         zero = []
-        a = {x: low}
-        b = {x: up}
         while abs(up - low) > epsilon:
             if self.evaluate(a) * self.evaluate({x: low + epsilon}) > 0:
                 low += epsilon
