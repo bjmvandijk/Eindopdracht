@@ -189,6 +189,7 @@ class Variable(Expression):
         return str(self.variable)
         
     def evaluate(self,dic):
+        #opl=eval(self,dic) #[self.variable]
         return float(dic[self.variable])
     
 
@@ -224,7 +225,6 @@ class BinaryNode(Expression):
             
     def opeq(self,other,dic1=None, dic2=None):
         "A function to compare the similarity of operants/constants/variables in self and other expression"
-        print('Equalty check started:')
         oplist = ['+', '-', '*', '/', '**', '%', '//']
         charlist = ['(',')',' ','.']
         strself=str(self) #Creating a string from self, without changing self
@@ -255,20 +255,6 @@ class BinaryNode(Expression):
                         otherv+=i
                 else:
                     otherc+=i
-        if (len(selfv) or len(otherv))>0:
-            "Checking if there is an Variable() in self or other and if a dictionary is given"
-            if (isvar(self)==True and dic1==None) or (isvar(other)==True and dic2==None):
-                print(' Found Type Variable() but missing dictionary')
-                print(' For comparing evaluate, please provide a dictionary for Expression in the following order:\n        self, other, dictonary self, dictionary other')
-                return
-            else:
-                "Evaluation of self and other and comparing the result (with or without dictionaries)"
-                evaluated=(BinaryNode.evaluate(self,dic1)==BinaryNode.evaluate(other,dic2))
-                if evaluated==True:
-                    print(' Evaluated Expressions are equal:',BinaryNode.evaluate(self,dic1))
-                else:
-                    print(' Evaluated Expressions are not equal:', BinaryNode.evaluate(self,dic1),'and', BinaryNode.evaluate(other,dic2))
-        print(selfop)
         if (selfop==otherop)==True:
             print(' Operations are equal and in the same order')
         else:
@@ -317,7 +303,7 @@ class BinaryNode(Expression):
         rhsEval = self.rhs.evaluate(dic)
         return eval("%s %s %s" % (lhsEval, self.op_symbol, rhsEval))
         
-    '''def findRoot(self,x,epsilon,a=-1000,b=1000):
+    def findRoot(self,x,epsilon,a=-1000,b=1000):
         "Represents a function to find zero points of an expression with 1 Variable()"
         self=str(self)
         m=(a+b)/2
@@ -342,8 +328,8 @@ class BinaryNode(Expression):
             else:
                 zero.append(BinaryNode.findRoot(self,x,epsilon, a, (a+epsilon)))
                 a+=epsilon
-        return zero'''
-    def findRoot(self, x,epsilon, a=-1000, b=1000):
+        return zero
+    '''def findRoot(self, x,epsilon, a=-1000, b=1000):
         m=(a+b)/2
         while (b-a) > epsilon:
             print(epsilon, a, b, 'root')
@@ -362,12 +348,12 @@ class BinaryNode(Expression):
         zero = []
         while abs(b - a) > epsilon:
             print(b,a,epsilon)
-            if (self.evaluate({x:a})*self.evaluate({x:a+epsilon}))>0:
+            if (self.evaluate({x:a})*self.evaluate({x:(a+epsilon)}))>0:
                 a+=epsilon
             else:
                 zero.append(self.findRoot(x,epsilon, a, (a+epsilon)))
                 a+=epsilon
-        return zero  
+        return zero'''  
     
 class AddNode(BinaryNode):
     """Represents the addition operator"""
