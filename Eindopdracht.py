@@ -134,7 +134,7 @@ class Expression():
         output = []
         
         # list of operators
-        oplist = ['+', '-', '*', '/', '**', '%', '//']#, '==']
+        oplist = ['+', '-', '*', '/', '**', '%', '//']
         
         for token in tokens:
             if isnumber(token):
@@ -258,48 +258,54 @@ class BinaryNode(Expression):
         
 ######### TODO: do we always need parantheses?
         oplist = ['+', '-', '*', '/', '**', '%', '//']
-        if self.op_symbol in oplist:
-            stringself= "%s %s %s %s" % (lstring[:len(lstring)-2],lstring[len(lstring)-1], self.op_symbol, rstring)
+        #if self.op_symbol in oplist:
+        #    stringself = "%s %s %s" % (lstring, self.op_symbol, rstring)
         #        print(stringself)
-            return stringself
-        for 
-            if i in oplist5:
-        #        if self.op_symbol not in (oplist5 or oplist3 or oplist2):
-        #            stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
-        #            print(stringself)
+        #    return stringself
+        #for token in lstring:
+        #    if token in oplist:#  and prec("%s") <= prec(token):
+        #        if prec(self.opsymbol) <= prec(token):
+        #            stringself= "%s %s %s" % (lstring, self.op_symbol, rstring)
+        #           print(stringself)
         #            return stringself
-        #oplist2 = ['+','-']
-        #oplist3 = ['*','/']
-        #oplist4 = ['**']
-        #oplist5 = ['%', '//']
-        #if self.op_symbol in oplist4:
-        #        stringself= "%s %s %s %s" % (lstring[:len(lstring)-2],lstring[len(lstring)-1], self.op_symbol, rstring)
-        #        print(stringself)
-        #        return stringself
-        #for i in lstring:
-        #    if i in oplist2:
-        #        if self.op_symbol not in oplist2:
-        #            stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
-        #            print(stringself)
-        #            return stringself
-        #    if i in oplist3:
-        #        if self.op_symbol not in (oplist3 or oplist2):
-        #            stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
-        #            print(stringself)
-        #            return stringself
-        #    if i in oplist5:
-        #        if self.op_symbol not in (oplist5 or oplist3 or oplist2):
-        #            stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
-        #            print(stringself)
-        #            return stringself
-        #    if i in oplist4:
-        #        if self.op_symbol not in oplist4:
-        #            stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
-        #            print(stringself)
-        #            return stringself        
-        #stringself= "%s %s %s" % (lstring, self.op_symbol, rstring)
-        #print(stringself)
         #return stringself
+
+        #        if self.op_symbol not in (oplist5 or oplist3 or oplist2):
+        #            stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
+        #            print(stringself)
+        #            return stringself
+        oplist2 = ['+','-']
+        oplist3 = ['*','/']
+        oplist4 = ['**']
+        oplist5 = ['%', '//']
+        if self.op_symbol in oplist4:
+                stringself= "%s %s %s" % (lstring, self.op_symbol, rstring)
+                print(stringself)
+                return stringself
+        for i in lstring:
+            if i in oplist2:
+                if self.op_symbol not in oplist2:
+                    stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
+                    print(stringself)
+                    return stringself
+            if i in oplist3:
+                if self.op_symbol not in (oplist3 or oplist2):
+                    stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
+                    print(stringself)
+                    return stringself
+            if i in oplist5:
+                if self.op_symbol not in (oplist5 or oplist3 or oplist2):
+                    stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
+                    print(stringself)
+                    return stringself
+            if i in oplist4:
+                if self.op_symbol not in oplist4:
+                    stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
+                    print(stringself)
+                    return stringself        
+        stringself= "%s %s %s" % (lstring, self.op_symbol, rstring)
+        print(stringself)
+        return stringself
 #        return "(%s %s %s)" % (lstring, self.op_symbol, rstring)
 
     def evaluate(self, dic=None):
@@ -307,21 +313,18 @@ class BinaryNode(Expression):
         rhsEval = self.rhs.evaluate(dic)
         return eval("(%s %s %s)" % (lhsEval, self.op_symbol, rhsEval)) 
 
-    def findRoot(self, x, low, up, epsilon):
+    def findRoot(self, x, a=-1000, b=1000, epsilon):
         """Represents a function to find the zero values of a function with one variable???????"""
-        a = {x: low}
-        b = {x: up}
-        mp = (low + up) / 2
-        m = {x: mp} 
-        while abs(up - low) > (epsilon):
-            if self.evaluate(m) == 0:
-                return mp
-            elif self.evaluate(b) * self.evaluate(m) < 0:
-                low = mp
+        self.x = x
+        m = (a + b) / 2
+        while (b - a) > (epsilon):
+            if eval(self, {self.x: m}) == 0:
+                return m
+            elif eval(self, {self.x: b}) * eval(self, {self.x: m}) < 0:
+                a = m
             else:
-                up = mp
-            mp = (low + up) / 2
-            m = {x: mp}
+                b = m
+            m = (a + b) / 2
         return ("{:.3f}".format(c))
 
     def findAllRoots(self, x, low, up, epsilon):
