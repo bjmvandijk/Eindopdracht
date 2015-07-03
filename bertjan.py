@@ -14,7 +14,7 @@ import math
 # returns a list of numbers, operators, parantheses and commas
 # output will not contain spaces
 def tokenize(string):
-    splitchars = list("+-*/(),%=")
+    splitchars = list("+-*/(),%")
     # surround any splitchar by spaces
     tokenstring = []
     for c in string:
@@ -243,21 +243,21 @@ class BinaryNode(Expression):
         oplist = ['+', '-', '*', '/', '**', '%', '//']
         charlist = ['(',')',' ','.']
         #Creating a string from self, without changing self
-        strself = str(self) 
+        #strself = str(self) 
         #Creating a string from other, wothout changing other
-        strother = str(other)
+        #strother = str(other)
         #Initiating an operant string from self
-        selfop = str()
+        #selfop = str()
         #Initiating an operant string from other
-        otherop = str()
+        #otherop = str()
         #Initiating a Constant string from self
-        selfc = str()
+        #selfc = str()
         #Initiating a Constant string from other
-        otherc = str()
+        #otherc = str()
         #Initiating a Variable string from self
-        selfv = str()
+        #selfv = str()
         #Intiating a Variable string from other
-        otherv = str()
+        #otherv = str()
 
         #Creating a string from self, without changing self
         for i in str(self):
