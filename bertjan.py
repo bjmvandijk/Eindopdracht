@@ -1,9 +1,10 @@
 #!/usr/bin/0python3
 
 """
-Code which saves mathematical formulas as an expression tree, this is done by 
-converting the Reverse Polish Notation provided by the Shunting-Yard algorithm.
+Code which saves mathematical expressions as an expression tree, this is done by implementing 
+the Shunting-Yard algorithm to convert the Reverse Polish Notation into an expression tree.
 This representation can be used to perform several calculations and symbolic manipulation.
+
 B.J.M. van Dijk & M.O. El-Haloush @ Utrecht, 2015
 """
 
