@@ -243,21 +243,21 @@ class BinaryNode(Expression):
         oplist = ['+', '-', '*', '/', '**', '%', '//']
         charlist = ['(',')',' ','.']
         #Creating a string from self, without changing self
-        #strself = str(self) 
+        strself = str(self) 
         #Creating a string from other, wothout changing other
-        #strother = str(other)
+        strother = str(other)
         #Initiating an operant string from self
-        #selfop = str()
+        selfop = str()
         #Initiating an operant string from other
-        #otherop = str()
+        otherop = str()
         #Initiating a Constant string from self
-        #selfc = str()
+        selfc = str()
         #Initiating a Constant string from other
-        #otherc = str()
+        otherc = str()
         #Initiating a Variable string from self
-        #selfv = str()
+        selfv = str()
         #Intiating a Variable string from other
-        #otherv = str()
+        otherv = str()
 
         #Creating a string from self, without changing self
         for i in str(self):
@@ -302,13 +302,13 @@ class BinaryNode(Expression):
         oplist = ['+', '-', '*', '/', '**', '%', '//']
         for token in lstring:
             if token in oplist:
-                if  int(prec(token)) >= int(prec(self.op_symbol)) and int(prec(token)) <= 2:
-                    #stringself= 
-                    return "(%s) %s %s" % (lstring, self.op_symbol, rstring)
-                    #return stringself
-                else:
+                if  (int(assoc(token)) == 0 and int(prec(token) <= int(prec(self.op_symbol)))):
                     #stringself= 
                     return "%s %s %s" % (lstring, self.op_symbol, rstring)
+                    #return stringself
+                elif ((int(assoc(token)) == 1 and int(prec(token))) <  int(prec(self.op_symbol))):
+                    #stringself= 
+                    return "(%s) %s %s" % (lstring, self.op_symbol, rstring)
                     #return stringself
         #stringself= 
         return "%s %s %s" % (lstring, self.op_symbol, rstring)
