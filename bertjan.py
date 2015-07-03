@@ -1,9 +1,8 @@
 #!/usr/bin/0python3
 
 """
-Code which saves mathematical formulas as an expression tree, this is done by 
-converting the Reverse Polish Notation provided by the Shunting-Yard algorithm.
-
+Code which saves mathematical expressions as an expression tree, this is done by implementing 
+the Shunting-Yard algorithm to convert the Reverse Polish Notation into an expression tree.
 This representation can be used to perform several calculations and symbolic manipulation.
 
 B.J.M. van Dijk & M.O. El-Haloush @ Utrecht, 2015
@@ -79,14 +78,12 @@ def prec(token):
 
 # check associativity
 def assoc(token):
-    if token == '*':
+    l_oplist = ['+', '-', '*', '/', '%', '//']
+    r_oplist = ['**']   
+    if token in l_oplist:
+        return(0)
+    if token in r_oplist:
         return(1)
-    if token == '/':
-        return(2)
-    if token == '%' or token == '+':
-        return(3)
-    if token == '//' or token == '-':
-        return(4)
 
 
 class Expression():
@@ -145,7 +142,9 @@ class Expression():
             elif token in oplist:
                 # pop operators from the stack to the output until the top is no longer an operator
                 while True:
-                    if len(stack) == 0 or stack[-1] not in oplist or int(prec(token)) <= int(prec(stack[-1])):
+                    if len(stack) == 0 or stack[-1] not in oplist \
+                    or int(assoc(stack[-1])) == 0 and int(prec(stack[-1])) <= int(prec(token)) \
+                    or int(assoc(stack[-1])) == 1 and int(prec(stack[-1])) <  int(prec(token)):
                         break
                     output.append(stack.pop())
                 # push the new operator onto the stack
@@ -244,41 +243,49 @@ class BinaryNode(Expression):
         oplist = ['+', '-', '*', '/', '**', '%', '//']
         charlist = ['(',')',' ','.']
         #Creating a string from self, without changing self
-        strself = str(self) 
+        #strself = str(self) 
         #Creating a string from other, wothout changing other
-        strother = str(other)
+        #strother = str(other)
         #Initiating an operant string from self
-        selfop = str()
+        #selfop = str()
         #Initiating an operant string from other
-        otherop = str()
+        #otherop = str()
         #Initiating a Constant string from self
-        selfc = str()
+        #selfc = str()
         #Initiating a Constant string from other
-        otherc = str()
+        #otherc = str()
         #Initiating a Variable string from self
-        selfv = str()
+        #selfv = str()
         #Intiating a Variable string from other
-        otherv = str()
-        for i in strself:
-            "Adding of the strings from self"
+        #otherv = str()
+
+        #Creating a string from self, without changing self
+        for i in str(self):
             if i in oplist:
-                selfop += i
+                # Initiating an operant string from self
+                selfop += str(i)
             else:
                 if isint(i) == False or isnumber(i) == False:
                     if i not in charlist:
-                        selfv += i
+                        # Initiating a Variable string from self
+                        selfv += str(i)
                 else:
-                    selfc += i
-        for i in strother:
-            "Adding of the strings from other"
+                    # Initiating a Constant string from self
+                    selfc += str(i)
+        # Creating a string from other, without changing other
+        for i in str(other):
+            # Adding of the strings from other
             if i in oplist:
-                otherop += i
+                # Initiating an operant string from other
+                otherop += str(i)
             else:
                 if isint(i) == False or isnumber(i) == False:
                     if i not in charlist:
-                        otherv += i
+                        # Initiating a Variable string from self
+                        otherv += str(i)
                 else:
-                    otherc += i
+                    # Initiating a Constant string from other
+                    otherc += str(i)
         if (selfop == otherop) == True:
             print(' Operations are equal and in the same order')
         else:
@@ -296,13 +303,16 @@ class BinaryNode(Expression):
         for token in lstring:
             if token in oplist:
                 if  int(prec(token)) >= int(prec(self.op_symbol)) and int(prec(token)) <= 2:
-                    stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
-                    return stringself
+                    #stringself= 
+                    return "(%s) %s %s" % (lstring, self.op_symbol, rstring)
+                    #return stringself
                 else:
-                    stringself= "%s %s %s" % (lstring, self.op_symbol, rstring)
-                    return stringself
-        stringself= "%s %s %s" % (lstring, self.op_symbol, rstring)
-        return stringself
+                    #stringself= 
+                    return "%s %s %s" % (lstring, self.op_symbol, rstring)
+                    #return stringself
+        #stringself= 
+        return "%s %s %s" % (lstring, self.op_symbol, rstring)
+        #return stringself
 
     def evaluate(self, dic=None):
         lhsEval = self.lhs.evaluate(dic)
@@ -311,28 +321,27 @@ class BinaryNode(Expression):
 
     def findRoot(self , x, a = -1000, b = 1000, epsilon = 0.01):
         "Represents a function to find zero points of an expression with 1 Variable()"
-        self = str(self)
         m = ( a + b ) / 2
         while (b - a) > epsilon:
-            if eval(self, {x:m}) == 0:
+            if eval(str(self), {x: m}) == 0:
                 return m
-            elif (eval(self, {x:a}) * eval(self, {x:m})) < abs(epsilon):
-                b=m
-            elif (eval(self, {x:b}) * eval(self, {x:m})) < abs(epsilon):
+            elif (eval(str(self), {x: a}) * eval(str(self), {x:m})) < abs(epsilon):
+                b = m
+            elif (eval(str(self), {x: b}) * eval(str(self), {x:m})) < abs(epsilon):
                 a = m
             else:
                 b = m
             m = ( a + b ) / 2
-        return ("{:.4f}".format( m ))
+        return ("{:.3f}".format(m))
     
     def findAllRoots(self, x, a = -1000, b = 1000, epsilon = 0.01):
         zero = []
-        self=str(self)
+        #self=str(self)
         while abs(b - a) > epsilon:
-            if (eval(self, {x:a}) * eval(self, {x:a + epsilon})) > 0:
+            if (eval(str(self), {x:a}) * eval(str(self), {x: a + epsilon})) > 0:
                 a += epsilon
             else:
-                zero.append(BinaryNode.findRoot(self,x, a, (a+epsilon), epsilon))
+                zero.append(self.findRoot(x, a, (a+epsilon), epsilon))
                 a += epsilon
         return zero   
 
