@@ -294,7 +294,6 @@ class BinaryNode(Expression):
             print(' Constants are equal and in the same order')
         else:
             print(' Constants are not equal')
-        print(selfc,selfop)    
         return        
             
     def __str__(self):
