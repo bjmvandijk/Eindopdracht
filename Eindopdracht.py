@@ -9,7 +9,6 @@ This representation can be used to perform several calculations and symbolic man
 B.J.M. van Dijk & M.O. El-Haloush @ Utrecht, 2015
 """
 
-
 import math
 
 # split a string into mathematical tokens
