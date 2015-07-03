@@ -1,4 +1,5 @@
-from Eindopdracht import *
+from bertjan import *
+
 a = Constant(2.0)
 b = Constant(3.0)
 d = Constant(10)

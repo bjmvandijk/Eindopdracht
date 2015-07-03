@@ -263,29 +263,29 @@ class BinaryNode(Expression):
         for i in str(self):
             if i in oplist:
                 # Initiating an operant string from self
-                selfop += str(i)
+                selfop = str(i)
             else:
                 if isint(i) == False or isnumber(i) == False:
                     if i not in charlist:
                         # Initiating a Variable string from self
-                        selfv += str(i)
+                        selfv = str(i)
                 else:
                     # Initiating a Constant string from self
-                    selfc += str(i)
+                    selfc = str(i)
         # Creating a string from other, without changing other
         for i in str(other):
             # Adding of the strings from other
             if i in oplist:
                 # Initiating an operant string from other
-                otherop += str(i)
+                otherop = str(i)
             else:
                 if isint(i) == False or isnumber(i) == False:
                     if i not in charlist:
                         # Initiating a Variable string from self
-                        otherv += str(i)
+                        otherv = str(i)
                 else:
                     # Initiating a Constant string from other
-                    otherc += str(i)
+                    otherc = str(i)
         if (selfop == otherop) == True:
             print(' Operations are equal and in the same order')
         else:
