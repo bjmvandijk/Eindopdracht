@@ -3,10 +3,8 @@
 """
 Code which saves mathematical formulas as an expression tree, this is done by 
 converting the Reverse Polish Notation provided by the Shunting-Yard algorithm.
-
 This representation can be used to perform several calculations and symbolic manipulation.
-
-Bertjan van Dijk & Omar El-Haloush @ Utrecht, 2015
+B.J.M. van Dijk & M.O. El-Haloush @ Utrecht, 2015
 """
 
 
@@ -40,7 +38,7 @@ def tokenize(string):
             ans.append(t)
     return ans
 
-    
+
 # check if a string represents a numeric value
 def isnumber(string):
     try:
@@ -48,6 +46,7 @@ def isnumber(string):
         return True
     except ValueError:
         return False
+
 
 # check if a string represents an integer value        
 def isint(string):
@@ -57,6 +56,7 @@ def isint(string):
     except ValueError:
         return False
 
+
 # check if a string represents a variable
 def isvar(string):
     try:
@@ -64,6 +64,7 @@ def isvar(string):
         return True
     except ValueError:
         return False
+
 
 # check precedence
 def prec(token):
@@ -74,26 +75,24 @@ def prec(token):
     elif token == '+' or token == '-':
         return(3)
 
+
 # check associativity
 def assoc(token):
-    if token == '*':
+    l_oplist = ['+', '-', '*', '/', '%', '//']
+    r_oplist = ['**']   
+    if token in l_oplist:
+        return(0)
+    if token in r_oplist:
         return(1)
-    if token == '/':
-        return(2)
-    if token == '%' or token == '+':
-        return(3)
-    if token == '//' or token == '-':
-        return(4)
+
 
 class Expression():
     """A mathematical expression, represented as an expression tree"""
-    
     """
     Any concrete subclass of Expression should have these methods:
      - __str__(): return a string representation of the Expression.
      - __eq__(other): tree-equality, check if other represents the same expression tree.
     """
-    
     # operator overloading:
     # this allows us to perform 'arithmetic' with expressions, and obtain another expression
     def __add__(self, other):
@@ -126,16 +125,13 @@ class Expression():
     def fromString(string):
         # split into tokens
         tokens = tokenize(string)
-        
         # stack used by the Shunting-Yard algorithm
         stack = []
         # output of the algorithm: a list representing the formula in RPN
         # this will contain Constant's and '+'s
         output = []
-        
         # list of operators
         oplist = ['+', '-', '*', '/', '**', '%', '//']
-        
         for token in tokens:
             if isnumber(token):
                 # numbers go directly to the output
@@ -146,10 +142,9 @@ class Expression():
             elif token in oplist:
                 # pop operators from the stack to the output until the top is no longer an operator
                 while True:
-##################### TODO: when there are more operators, the rules are more complicated
-                    # look up the shunting yard-algorithm
-
-                    if len(stack) == 0 or stack[-1] not in oplist or int(prec(token)) <= int(prec(stack[-1])):
+                    if len(stack) == 0 or stack[-1] not in oplist \
+                    or int(assoc(stack[-1])) == 0 and int(prec(stack[-1])) <= int(prec(token)) \
+                    or int(assoc(stack[-1])) == 1 and int(prec(stack[-1])) <  int(prec(token)):
                         break
                     output.append(stack.pop())
                 # push the new operator onto the stack
@@ -165,15 +160,12 @@ class Expression():
                     output.append(stack.pop())
                 # pop the left paranthesis from the stack (but not to the output)
                 stack.pop()
-############# TODO: do we need more kinds of tokens? misschien alleen nog een functie???
             else:
                 # unknown token
                 raise ValueError('Unknown token: %s' % token)
-            
         # pop any tokens still on the stack to the output
         while len(stack) > 0:
             output.append(stack.pop())
-        
         # convert RPN to an actual expression tree
         for t in output:
             if t in oplist:
@@ -188,11 +180,6 @@ class Expression():
         return stack[0]
 
 
-
-
-
-
-    
 class Constant(Expression):
     """Represents a constant value"""
     def __init__(self, value):
@@ -235,7 +222,6 @@ class Variable(Expression):
     def evaluate(self, dic=None):
         return dic[self.variable]          
 
-
         
 class BinaryNode(Expression):
     """A node in the expression tree representing a binary operator."""    
@@ -252,92 +238,111 @@ class BinaryNode(Expression):
         else:
             return self.lhs == other.lhs and self.rhs == other.rhs
             
+    def expteq(self,other,dic1=None, dic2=None):
+        "A function to compare the similarity of operants/constants/variables in self and other expression"
+        oplist = ['+', '-', '*', '/', '**', '%', '//']
+        charlist = ['(',')',' ','.']
+        #Creating a string from self, without changing self
+        #strself = str(self) 
+        #Creating a string from other, wothout changing other
+        #strother = str(other)
+        #Initiating an operant string from self
+        #selfop = str()
+        #Initiating an operant string from other
+        #otherop = str()
+        #Initiating a Constant string from self
+        #selfc = str()
+        #Initiating a Constant string from other
+        #otherc = str()
+        #Initiating a Variable string from self
+        #selfv = str()
+        #Intiating a Variable string from other
+        #otherv = str()
+
+        #Creating a string from self, without changing self
+        for i in str(self):
+            if i in oplist:
+                # Initiating an operant string from self
+                selfop += str(i)
+            else:
+                if isint(i) == False or isnumber(i) == False:
+                    if i not in charlist:
+                        # Initiating a Variable string from self
+                        selfv += str(i)
+                else:
+                    # Initiating a Constant string from self
+                    selfc += str(i)
+        # Creating a string from other, without changing other
+        for i in str(other):
+            # Adding of the strings from other
+            if i in oplist:
+                # Initiating an operant string from other
+                otherop += str(i)
+            else:
+                if isint(i) == False or isnumber(i) == False:
+                    if i not in charlist:
+                        # Initiating a Variable string from self
+                        otherv += str(i)
+                else:
+                    # Initiating a Constant string from other
+                    otherc += str(i)
+        if (selfop == otherop) == True:
+            print(' Operations are equal and in the same order')
+        else:
+            print(' Operations are not equal')
+        if (selfc == otherc) == True:
+            print(' Constants are equal and in the same order')
+        else:
+            print(' Constants are not equal')
+        return        
+            
     def __str__(self):
         lstring = str(self.lhs)
         rstring = str(self.rhs)
-        
-######### TODO: do we always need parantheses?
         oplist = ['+', '-', '*', '/', '**', '%', '//']
-        #if self.op_symbol in oplist:
-        #    stringself = "%s %s %s" % (lstring, self.op_symbol, rstring)
-        #        print(stringself)
-        #    return stringself
-        #for token in lstring:
-        #    if token in oplist:#  and prec("%s") <= prec(token):
-        #        if prec(self.opsymbol) <= prec(token):
-        #            stringself= "%s %s %s" % (lstring, self.op_symbol, rstring)
-        #           print(stringself)
-        #            return stringself
+        for token in lstring:
+            if token in oplist:
+                if  int(prec(token)) >= int(prec(self.op_symbol)) and int(prec(token)) <= 2:
+                    #stringself= 
+                    return "(%s) %s %s" % (lstring, self.op_symbol, rstring)
+                    #return stringself
+                else:
+                    #stringself= 
+                    return "%s %s %s" % (lstring, self.op_symbol, rstring)
+                    #return stringself
+        #stringself= 
+        return "%s %s %s" % (lstring, self.op_symbol, rstring)
         #return stringself
-
-        #        if self.op_symbol not in (oplist5 or oplist3 or oplist2):
-        #            stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
-        #            print(stringself)
-        #            return stringself
-        oplist2 = ['+','-']
-        oplist3 = ['*','/']
-        oplist4 = ['**']
-        oplist5 = ['%', '//']
-        if self.op_symbol in oplist4:
-                stringself= "%s %s %s" % (lstring, self.op_symbol, rstring)
-                print(stringself)
-                return stringself
-        for i in lstring:
-            if i in oplist2:
-                if self.op_symbol not in oplist2:
-                    stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
-                    print(stringself)
-                    return stringself
-            if i in oplist3:
-                if self.op_symbol not in (oplist3 or oplist2):
-                    stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
-                    print(stringself)
-                    return stringself
-            if i in oplist5:
-                if self.op_symbol not in (oplist5 or oplist3 or oplist2):
-                    stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
-                    print(stringself)
-                    return stringself
-            if i in oplist4:
-                if self.op_symbol not in oplist4:
-                    stringself= "(%s) %s %s" % (lstring, self.op_symbol, rstring)
-                    print(stringself)
-                    return stringself        
-        stringself= "%s %s %s" % (lstring, self.op_symbol, rstring)
-        print(stringself)
-        return stringself
-#        return "(%s %s %s)" % (lstring, self.op_symbol, rstring)
 
     def evaluate(self, dic=None):
         lhsEval = self.lhs.evaluate(dic)
         rhsEval = self.rhs.evaluate(dic)
         return eval("(%s %s %s)" % (lhsEval, self.op_symbol, rhsEval)) 
 
-    def findRoot(self, x, a=-1000, b=1000, epsilon=0.01):
-        """Represents a function to find the zero values of a function with one variable???????"""
-        self.x = x
-        m = (a + b) / 2
-        while (b - a) > (epsilon):
-            if eval(self, {self.x: m}) == 0:
+    def findRoot(self , x, a = -1000, b = 1000, epsilon = 0.01):
+        "Represents a function to find zero points of an expression with 1 Variable()"
+        m = ( a + b ) / 2
+        while (b - a) > epsilon:
+            if eval(str(self), {x: m}) == 0:
                 return m
-            elif eval(self, {self.x: b}) * eval(self, {self.x: m}) < 0:
+            elif (eval(str(self), {x: a}) * eval(str(self), {x:m})) < abs(epsilon):
+                b = m
+            elif (eval(str(self), {x: b}) * eval(str(self), {x:m})) < abs(epsilon):
                 a = m
             else:
                 b = m
-            m = (a + b) / 2
-        return ("{:.3f}".format(c))
-
-    def findAllRoots(self, x, a=-1000, b=1000, epsilon=0.01):
-        self.x = x
+            m = ( a + b ) / 2
+        return ("{:.3f}".format(m))
+    
+    def findAllRoots(self, x, a = -1000, b = 1000, epsilon = 0.01):
         zero = []
-        while abs(up - low) > epsilon:
-            if self.evaluate(a) * self.evaluate({x: low + epsilon}) > 0:
-                low += epsilon
-                a = {x: low}
+        #self=str(self)
+        while abs(b - a) > epsilon:
+            if (eval(str(self), {x:a}) * eval(str(self), {x: a + epsilon})) > 0:
+                a += epsilon
             else:
-                zero.append(self.findRoot(x, low, low + epsilon, epsilon))
-                low += epsilon
-                a = {x: low}
+                zero.append(self.findRoot(x, a, (a+epsilon), epsilon))
+                a += epsilon
         return zero   
 
         
@@ -381,6 +386,7 @@ class FloorDivNode(BinaryNode):
     """Represents the floor division operator"""
     def __init__(self, lhs, rhs):
         super(FloorDivNode, self).__init__(lhs, rhs, '//')
+
 
 class EqNode(BinaryNode):
     """Represents the equality operator"""
